@@ -1,3 +1,8 @@
+import tensorflow as tf
+
+LAMBDA = 10
+loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+
 def discriminator_loss(real, generated):
   real_loss = loss_obj(tf.ones_like(real), real)
 
