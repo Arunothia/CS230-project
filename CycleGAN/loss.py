@@ -1,6 +1,8 @@
 import tensorflow as tf
+import CycleGAN.args as args
 
-LAMBDA = 10
+# Arguments
+opt = args.get_setup_args()
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
 def discriminator_loss(real, generated):
@@ -19,8 +21,8 @@ def generator_loss(generated):
 def calc_cycle_loss(real_image, cycled_image):
   loss1 = tf.reduce_mean(tf.abs(real_image - cycled_image))
   
-  return LAMBDA * loss1
+  return opt.lambd * loss1
 
 def identity_loss(real_image, same_image):
   loss = tf.reduce_mean(tf.abs(real_image - same_image))
-  return LAMBDA * 0.5 * loss
+  return opt.lambd * 0.5 * loss

@@ -1,13 +1,15 @@
 import CycleGAN.setup as setup
 import CycleGAN.loss as loss
+import CycleGAN.args as args
 
-OUTPUT_CHANNELS = 3
+# Arguments
+opt = args.get_setup_args()
 
-generator_g = setup.pix2pix.unet_generator(OUTPUT_CHANNELS, norm_type='instancenorm')
-generator_f = setup.pix2pix.unet_generator(OUTPUT_CHANNELS, norm_type='instancenorm')
+generator_g = setup.pix2pix.unet_generator(opt.output_channels, norm_type=opt.norm_type)
+generator_f = setup.pix2pix.unet_generator(opt.output_channels, norm_type=opt.norm_type)
 
-discriminator_x = setup.pix2pix.discriminator(norm_type='instancenorm', target=False)
-discriminator_y = setup.pix2pix.discriminator(norm_type='instancenorm', target=False)
+discriminator_x = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
+discriminator_y = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 
 
 to_zebra = generator_g(setup.sample_horse)
@@ -39,11 +41,11 @@ setup.plt.imshow(discriminator_x(setup.sample_horse)[0, ..., -1], cmap='RdBu_r')
 
 setup.plt.show()
 
-generator_g_optimizer = setup.tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-generator_f_optimizer = setup.tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+generator_g_optimizer = setup.tf.keras.optimizers.Adam(opt.lr, beta_1=opt.b1)
+generator_f_optimizer = setup.tf.keras.optimizers.Adam(opt.lr, beta_1=opt.b1)
 
-discriminator_x_optimizer = setup.tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-discriminator_y_optimizer = setup.tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+discriminator_x_optimizer = setup.tf.keras.optimizers.Adam(opt.lr, beta_1=opt.b1)
+discriminator_y_optimizer = setup.tf.keras.optimizers.Adam(opt.lr, beta_1=opt.b1)
 
 checkpoint_path = "./checkpoints/train"
 
@@ -56,14 +58,12 @@ ckpt = setup.tf.train.Checkpoint(generator_g=generator_g,
                            discriminator_x_optimizer=discriminator_x_optimizer,
                            discriminator_y_optimizer=discriminator_y_optimizer)
 
-ckpt_manager = setup.tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=5)
+ckpt_manager = setup.tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=opt.checkpoints_keep)
 
 # if a checkpoint exists, restore the latest checkpoint.
 if ckpt_manager.latest_checkpoint:
   ckpt.restore(ckpt_manager.latest_checkpoint)
   print ('Latest checkpoint restored!!')
-
-EPOCHS = 40
 
 @setup.tf.function
 def train_step(real_x, real_y):
@@ -126,7 +126,7 @@ def train_step(real_x, real_y):
   discriminator_y_optimizer.apply_gradients(zip(discriminator_y_gradients,
                                                 discriminator_y.trainable_variables))
 
-for epoch in range(EPOCHS):
+for epoch in range(opt.num_epochs):
   start = setup.time.time()
 
   n = 0
@@ -141,7 +141,7 @@ for epoch in range(EPOCHS):
   # is clearly visible.
   generate_images(generator_g, setup.sample_horse)
 
-  if (epoch + 1) % 5 == 0:
+  if (epoch + 1) % opt.checkpoint_epochs == 0:
     ckpt_save_path = ckpt_manager.save()
     print ('Saving checkpoint for epoch {} at {}'.format(epoch+1,
                                                          ckpt_save_path))

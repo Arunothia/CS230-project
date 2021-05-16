@@ -7,12 +7,17 @@ import time
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
+import CycleGAN.args as args
+
+# Arguments
+opt = args.get_setup_args()
+
 AUTOTUNE = tf.data.AUTOTUNE
 
-BUFFER_SIZE = 1000
-BATCH_SIZE = 1
-IMG_WIDTH = 256
-IMG_HEIGHT = 256
+BUFFER_SIZE = opt.buffer_size
+BATCH_SIZE = opt.batch_size
+IMG_WIDTH = opt.img_width
+IMG_HEIGHT = opt.img_eight
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
