@@ -20,8 +20,6 @@ BATCH_SIZE = opt.batch_size
 IMG_WIDTH = opt.img_width
 IMG_HEIGHT = opt.img_height
 
-tf.compat.v1.disable_eager_execution()
-
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
 
@@ -87,6 +85,8 @@ test_zebras = test_zebras.map(
 
 sample_horse = next(iter(train_horses))
 sample_zebra = next(iter(train_zebras))
+
+tf.compat.v1.disable_eager_execution()
 
 plt.subplot(121)
 plt.title('Horse')
