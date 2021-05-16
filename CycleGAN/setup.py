@@ -5,6 +5,7 @@ from tensorflow_examples.models.pix2pix import pix2pix
 import os
 import time
 import matplotlib.pyplot as plt
+matplotlib.use('TkAgg')
 from IPython.display import clear_output
 
 import CycleGAN.args as args
