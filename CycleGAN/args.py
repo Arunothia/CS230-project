@@ -13,7 +13,7 @@ def get_setup_args():
     parser.add_argument("--checkpoints_keep", type=int, default=3, help="maximum checkpoints to keep")
     parser.add_argument("--checkpoint_epochs", type=int, default=1, help="number of epochs to leave between checkpoints")
     parser.add_argument("--lambd", type=int, default=10, help="Lambda for calculating loss")
-    parser.add_argument("--batch_size", type=int, default=64, help="size of the batches")
+    parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--buffer_size", type=int, default=1000, help="buffer size")
     parser.add_argument("--img_width", type=int, default=256, help="Width of Image")
     parser.add_argument("--img_height", type=int, default=256, help="Height of Image")
