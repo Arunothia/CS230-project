@@ -17,7 +17,7 @@ AUTOTUNE = tf.data.AUTOTUNE
 BUFFER_SIZE = opt.buffer_size
 BATCH_SIZE = opt.batch_size
 IMG_WIDTH = opt.img_width
-IMG_HEIGHT = opt.img_eight
+IMG_HEIGHT = opt.img_height
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
