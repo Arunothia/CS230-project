@@ -85,7 +85,7 @@ test_zebras = test_zebras.map(
 sample_horse = next(iter(train_horses))
 sample_zebra = next(iter(train_zebras))
 
-with tf.compat.v1.Session() as sess
+with tf.compat.v1.Session() as sess:
   plt.subplot(121)
   plt.title('Horse')
   img_horse = (sample_horse[0] * 0.5 + 0.5)
