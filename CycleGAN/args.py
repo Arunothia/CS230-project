@@ -17,9 +17,10 @@ def get_setup_args():
     parser.add_argument("--buffer_size", type=int, default=1000, help="buffer size")
     parser.add_argument("--img_width", type=int, default=256, help="Width of Image")
     parser.add_argument("--img_height", type=int, default=256, help="Height of Image")
+    parser.add_argument("--sample_data_path", type=str, default="data/sample/", help="path to root sample data directory")
+    parser.add_argument("--output_path", type=str, default="data/results/", help="path to directory for storing model output")
     
     #parser.add_argument("--data_path", type=str, default="data/2-class", help="path to root data directory")
-    #parser.add_argument("--output_path", type=str, default="results", help="path to directory for storing model output")
     #parser.add_argument("--num_workers", type=int, default=4, help="number of workers for dataloader")   
     #parser.add_argument("--latent_dim", type=int, default=100, help="dimensionality of the latent space")
     #parser.add_argument("--sample_interval", type=int, default=400, help="number of batches between image sampling")

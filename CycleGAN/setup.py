@@ -87,21 +87,25 @@ sample_zebra = next(iter(train_zebras))
 
 plt.subplot(121)
 plt.title('Horse')
-plt.imshow(sample_horse[0] * 0.5 + 0.5)
+plt.plot(sample_horse[0] * 0.5 + 0.5)
+plt.savefig(opt.sample_data_path + 'sample_horse.jpg')
 
 plt.subplot(122)
 plt.title('Horse with random jitter')
-plt.imshow(random_jitter(sample_horse[0]) * 0.5 + 0.5)
+plt.plot(random_jitter(sample_horse[0]) * 0.5 + 0.5)
+plt.savefig(opt.sample_data_path + 'sample_horse_jitter.jpg')
 
 plt.subplot(121)
 plt.title('Zebra')
-plt.imshow(sample_zebra[0] * 0.5 + 0.5)
+plt.plot(sample_zebra[0] * 0.5 + 0.5)
+plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
 
 plt.subplot(122)
 plt.title('Zebra with random jitter')
-plt.imshow(random_jitter(sample_zebra[0]) * 0.5 + 0.5)
+plt.plot(random_jitter(sample_zebra[0]) * 0.5 + 0.5)
+plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
 
-def generate_images(model, test_input):
+def generate_images(model, test_input, epoch):
   prediction = model(test_input)
     
   plt.figure(figsize=(12, 12))
@@ -113,6 +117,6 @@ def generate_images(model, test_input):
     plt.subplot(1, 2, i+1)
     plt.title(title[i])
     # getting the pixel values between [0, 1] to plot it.
-    plt.imshow(display_list[i] * 0.5 + 0.5)
+    plt.plot(display_list[i] * 0.5 + 0.5)
     plt.axis('off')
-  plt.show()
+  plt.savefig(opt.output_path + 'gen-'+ str(epoch))

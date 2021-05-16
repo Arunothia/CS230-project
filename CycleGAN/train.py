@@ -139,7 +139,7 @@ for epoch in range(opt.num_epochs):
   clear_output(wait=True)
   # Using a consistent image (sample_horse) so that the progress of the model
   # is clearly visible.
-  generate_images(generator_g, setup.sample_horse)
+  generate_images(generator_g, setup.sample_horse, epoch)
 
   if (epoch + 1) % opt.checkpoint_epochs == 0:
     ckpt_save_path = ckpt_manager.save()
