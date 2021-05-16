@@ -104,9 +104,9 @@ img_zebra_jitter = random_jitter(sample_zebra[0]) * 0.5 + 0.5
 
 
 with tf.compat.v1.Session() as sess:
-    plt.imsave(opt.sample_data_path + 'sample_horse.jpg', sess.run(img_horse), cmap=cmap)
+    plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap=cmap)
     plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', sess.run(img_horse_jitter), cmap=cmap)
-    plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sess.run(img_zebra), cmap=cmap)
+    plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap=cmap)
     plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sess.run(img_zebra_jitter), cmap=cmap)
     plt.show()
 
