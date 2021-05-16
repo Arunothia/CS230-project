@@ -9,6 +9,7 @@ def upgrade(package):
 
 
 install("git+https://github.com/tensorflow/examples.git")
+install("matplotlib")
 install("tensorflow")
 upgrade("tensorflow")
 install("tensorflow-datasets")
