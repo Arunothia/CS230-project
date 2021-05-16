@@ -11,6 +11,7 @@ import CycleGAN.args as args
 
 # Arguments
 opt = args.get_setup_args()
+cmap = plt.cm.jet
 
 AUTOTUNE = tf.data.AUTOTUNE
 
@@ -87,23 +88,19 @@ sample_zebra = next(iter(train_zebras))
 
 plt.subplot(121)
 plt.title('Horse')
-plt.plot(sample_horse[0] * 0.5 + 0.5)
-plt.savefig(opt.sample_data_path + 'sample_horse.jpg')
+plt.imsave(opt.sample_data_path + 'sample_horse.jpg', sample_horse[0] * 0.5 + 0.5, cmap=cmap)
 
 plt.subplot(122)
 plt.title('Horse with random jitter')
-plt.plot(random_jitter(sample_horse[0]) * 0.5 + 0.5)
-plt.savefig(opt.sample_data_path + 'sample_horse_jitter.jpg')
+plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', random_jitter(sample_horse[0]) * 0.5 + 0.5, cmap=cmap)
 
 plt.subplot(121)
 plt.title('Zebra')
-plt.plot(sample_zebra[0] * 0.5 + 0.5)
-plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sample_zebra[0] * 0.5 + 0.5, cmap=cmap)
 
 plt.subplot(122)
 plt.title('Zebra with random jitter')
-plt.plot(random_jitter(sample_zebra[0]) * 0.5 + 0.5)
-plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', random_jitter(sample_zebra[0]) * 0.5 + 0.5, cmap=cmap)
 
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
@@ -111,12 +108,11 @@ def generate_images(model, test_input, epoch):
   plt.figure(figsize=(12, 12))
 
   display_list = [test_input[0], prediction[0]]
-  title = ['Input Image', 'Predicted Image']
+  title = ['Input', 'Predicted']
 
   for i in range(2):
     plt.subplot(1, 2, i+1)
     plt.title(title[i])
     # getting the pixel values between [0, 1] to plot it.
-    plt.plot(display_list[i] * 0.5 + 0.5)
+    plt.imsave(opt.output_path + title[i] + str(epoch), display_list[i] * 0.5 + 0.5, cmap=cmap)
     plt.axis('off')
-  plt.savefig(opt.output_path + 'gen-'+ str(epoch))
