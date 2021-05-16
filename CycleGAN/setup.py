@@ -11,7 +11,6 @@ import CycleGAN.args as args
 
 # Arguments
 opt = args.get_setup_args()
-cmap = plt.cm.jet
 
 AUTOTUNE = tf.data.AUTOTUNE
 
@@ -86,25 +85,30 @@ test_zebras = test_zebras.map(
 sample_horse = next(iter(train_horses))
 sample_zebra = next(iter(train_zebras))
 
+sess = tf.Session()
 plt.subplot(121)
 plt.title('Horse')
-img_horse = (sample_horse[0] * 0.5 + 0.5).astype(float)
-plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap=cmap)
+img_horse = (sample_horse[0] * 0.5 + 0.5)
+plt.imshow(sess.run(img_horse), cmap='gray')
+plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap='gray')
 
 plt.subplot(122)
 plt.title('Horse with random jitter')
-img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5).astype(float)
-plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap=cmap)
+img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5)
+plt.imshow(sess.run(img_horse_jitter), cmap='gray')
+plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap='gray')
 
 plt.subplot(121)
 plt.title('Zebra')
-img_zebra = (sample_zebra[0] * 0.5 + 0.5).astype(float)
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap=cmap)
+img_zebra = (sample_zebra[0] * 0.5 + 0.5)
+plt.imshow(sess.run(img_zebra), cmap='gray')
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap='gray')
 
 plt.subplot(122)
 plt.title('Zebra with random jitter')
-img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5).astype(float)
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap=cmap)
+img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
+plt.imshow(sess.run(img_zebra_jitter), cmap='gray')
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap='gray')
 plt.show()
     
 
