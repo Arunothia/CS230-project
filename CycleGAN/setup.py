@@ -88,19 +88,23 @@ sample_zebra = next(iter(train_zebras))
 
 plt.subplot(121)
 plt.title('Horse')
-plt.imsave(opt.sample_data_path + 'sample_horse.jpg', sample_horse[0] * 0.5 + 0.5, cmap=cmap)
+img_horse = sample_horse[0] * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap=cmap)
 
 plt.subplot(122)
 plt.title('Horse with random jitter')
-plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', random_jitter(sample_horse[0]) * 0.5 + 0.5, cmap=cmap)
+img_horse_jitter = random_jitter(sample_horse[0]) * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap=cmap)
 
 plt.subplot(121)
 plt.title('Zebra')
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sample_zebra[0] * 0.5 + 0.5, cmap=cmap)
+img_zebra = sample_zebra[0] * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap=cmap)
 
 plt.subplot(122)
 plt.title('Zebra with random jitter')
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', random_jitter(sample_zebra[0]) * 0.5 + 0.5, cmap=cmap)
+img_zebra_jitter = random_jitter(sample_zebra[0]) * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap=cmap)
 
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
@@ -114,5 +118,6 @@ def generate_images(model, test_input, epoch):
     plt.subplot(1, 2, i+1)
     plt.title(title[i])
     # getting the pixel values between [0, 1] to plot it.
-    plt.imsave(opt.output_path + title[i] + str(epoch), display_list[i] * 0.5 + 0.5, cmap=cmap)
+    img = display_list[i] * 0.5 + 0.5
+    plt.imsave(opt.output_path + title[i] + str(epoch), img, cmap=cmap)
     plt.axis('off')
