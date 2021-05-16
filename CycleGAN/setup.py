@@ -89,25 +89,27 @@ plt.subplot(121)
 plt.title('Horse')
 img_horse = (sample_horse[0] * 0.5 + 0.5)
 plt.imshow(img_horse)
-plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse)
+#plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse)
 
 plt.subplot(122)
 plt.title('Horse with random jitter')
 img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5)
 plt.imshow(img_horse_jitter)
-plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter)
+#plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter)
 
 plt.subplot(121)
 plt.title('Zebra')
 img_zebra = (sample_zebra[0] * 0.5 + 0.5)
 plt.imshow(img_zebra)
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra)
+#plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra)
 
 plt.subplot(122)
 plt.title('Zebra with random jitter')
 img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
 plt.imshow(img_zebra_jitter)
-plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter)
+#plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter)
+
+plt.show()
     
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
