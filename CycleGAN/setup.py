@@ -1,6 +1,4 @@
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
-
+import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
 
@@ -88,27 +86,27 @@ test_zebras = test_zebras.map(
 sample_horse = next(iter(train_horses))
 sample_zebra = next(iter(train_zebras))
 
-with tf.compat.v1.Session() as sess:
-    plt.subplot(121)
-    plt.title('Horse')
-    img_horse = sample_horse[0] * 0.5 + 0.5
-    plt.imsave(opt.sample_data_path + 'sample_horse.jpg', sess.run(img_horse), cmap=cmap)
+plt.subplot(121)
+plt.title('Horse')
+img_horse = sample_horse[0] * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap=cmap)
 
-    plt.subplot(122)
-    plt.title('Horse with random jitter')
-    img_horse_jitter = random_jitter(sample_horse[0]) * 0.5 + 0.5
-    plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', sess.run(img_horse_jitter), cmap=cmap)
+plt.subplot(122)
+plt.title('Horse with random jitter')
+img_horse_jitter = random_jitter(sample_horse[0]) * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap=cmap)
 
-    plt.subplot(121)
-    plt.title('Zebra')
-    img_zebra = sample_zebra[0] * 0.5 + 0.5
-    plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sess.run(img_zebra), cmap=cmap)
+plt.subplot(121)
+plt.title('Zebra')
+img_zebra = sample_zebra[0] * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap=cmap)
 
-    plt.subplot(122)
-    plt.title('Zebra with random jitter')
-    img_zebra_jitter = random_jitter(sample_zebra[0]) * 0.5 + 0.5
-    plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', sess.run(img_zebra_jitter), cmap=cmap)
-    plt.show()
+plt.subplot(122)
+plt.title('Zebra with random jitter')
+img_zebra_jitter = random_jitter(sample_zebra[0]) * 0.5 + 0.5
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap=cmap)
+plt.show()
+    
 
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
