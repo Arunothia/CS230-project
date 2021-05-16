@@ -2,8 +2,6 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
 
-tf.compat.v1.enable_eager_execution()
-
 import os
 import time
 import matplotlib.pyplot as plt
@@ -87,33 +85,30 @@ test_zebras = test_zebras.map(
 sample_horse = next(iter(train_horses))
 sample_zebra = next(iter(train_zebras))
 
-with tf.compat.v1.Session() as sess:
-  plt.subplot(121)
-  plt.title('Horse')
-  img_horse = (sample_horse[0] * 0.5 + 0.5)
-  plt.imshow(sess.run(img_horse), cmap='gray')
-  plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap='gray')
+plt.subplot(121)
+plt.title('Horse')
+img_horse = (sample_horse[0] * 0.5 + 0.5)
+plt.imshow(img_horse)
+plt.imsave(opt.sample_data_path + 'sample_horse.jpg', img_horse, cmap='gray')
 
-  plt.subplot(122)
-  plt.title('Horse with random jitter')
-  img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5)
-  plt.imshow(sess.run(img_horse_jitter), cmap='gray')
-  plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap='gray')
+plt.subplot(122)
+plt.title('Horse with random jitter')
+img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5)
+plt.imshow(img_horse_jitter)
+plt.imsave(opt.sample_data_path + 'sample_horse_jitter.jpg', img_horse_jitter, cmap='gray')
 
-  plt.subplot(121)
-  plt.title('Zebra')
-  img_zebra = (sample_zebra[0] * 0.5 + 0.5)
-  plt.imshow(sess.run(img_zebra), cmap='gray')
-  plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap='gray')
+plt.subplot(121)
+plt.title('Zebra')
+img_zebra = (sample_zebra[0] * 0.5 + 0.5)
+plt.imshow(img_zebra)
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra, cmap='gray')
 
-  plt.subplot(122)
-  plt.title('Zebra with random jitter')
-  img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
-  plt.imshow(sess.run(img_zebra_jitter), cmap='gray')
-  plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap='gray')
-  plt.show()
+plt.subplot(122)
+plt.title('Zebra with random jitter')
+img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
+plt.imshow(img_zebra_jitter)
+plt.imsave(opt.sample_data_path + 'sample_zebra.jpg', img_zebra_jitter, cmap='gray')
     
-
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
     
