@@ -1,4 +1,6 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
 
@@ -19,8 +21,6 @@ BUFFER_SIZE = opt.buffer_size
 BATCH_SIZE = opt.batch_size
 IMG_WIDTH = opt.img_width
 IMG_HEIGHT = opt.img_height
-
-tf.disable_v2_behavior()
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
