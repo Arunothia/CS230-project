@@ -66,20 +66,20 @@ def preprocess_image_test(image, label):
   return image
 
 train_horses = train_horses.map(
-    preprocess_image_train, num_parallel_calls=AUTOTUNE).cache().shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE)
+    preprocess_image_train, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).cache().shuffle(
+    BUFFER_SIZE)
 
 train_zebras = train_zebras.map(
-    preprocess_image_train, num_parallel_calls=AUTOTUNE).cache().shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE)
+    preprocess_image_train, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).cache().shuffle(
+    BUFFER_SIZE)
 
 test_horses = test_horses.map(
-    preprocess_image_test, num_parallel_calls=AUTOTUNE).cache().shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE)
+    preprocess_image_test, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).cache().shuffle(
+    BUFFER_SIZE)
 
 test_zebras = test_zebras.map(
-    preprocess_image_test, num_parallel_calls=AUTOTUNE).cache().shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE)
+    preprocess_image_test, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).cache().shuffle(
+    BUFFER_SIZE)
 
 
 sample_horse = next(iter(train_horses))
