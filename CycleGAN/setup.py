@@ -68,25 +68,25 @@ sample_flute = train_flute[0, :, :, :]
 
 plt.subplot(121)
 plt.title('piano')
-img_piano = (sample_piano * 0.5 + 0.5)
+img_piano = np.squeeze((sample_piano * 0.5 + 0.5), axis=-1)
 plt.imshow(img_piano)
 plt.savefig(opt.sample_data_path + 'sample_piano.jpg')
 
 plt.subplot(122)
 plt.title('piano with random jitter')
-img_piano_jitter = (random_jitter(sample_piano) * 0.5 + 0.5)
+img_piano_jitter = np.squeeze((random_jitter(sample_piano) * 0.5 + 0.5), axis=-1)
 plt.imshow(img_piano_jitter)
 plt.savefig(opt.sample_data_path + 'sample_piano_jitter.jpg')
 
 plt.subplot(121)
 plt.title('flute')
-img_flute = (sample_flute * 0.5 + 0.5)
+img_flute = np.squeeze((sample_flute * 0.5 + 0.5), axis=-1)
 plt.imshow(img_flute)
 plt.savefig(opt.sample_data_path + 'sample_flute.jpg')
 
 plt.subplot(122)
 plt.title('flute with random jitter')
-img_flute_jitter = (random_jitter(sample_flute) * 0.5 + 0.5)
+img_flute_jitter = np.squueze((random_jitter(sample_flute) * 0.5 + 0.5), axis=-1)
 plt.imshow(img_flute_jitter)
 plt.savefig(opt.sample_data_path + 'sample_flute_jitter.jpg')
     
