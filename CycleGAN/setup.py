@@ -1,9 +1,12 @@
+import os
 import matplotlib
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
-import os
 import time
 from IPython.display import clear_output
 
