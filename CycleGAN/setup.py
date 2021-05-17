@@ -1,14 +1,14 @@
 import os
 import matplotlib
 matplotlib.use('Agg')
-  
+import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
 import time
 from IPython.display import clear_output
-
+import random
 import CycleGAN.args as args
 
 # Arguments
@@ -18,24 +18,20 @@ AUTOTUNE = tf.data.AUTOTUNE
 
 BUFFER_SIZE = opt.buffer_size
 BATCH_SIZE = opt.batch_size
-IMG_WIDTH = opt.img_width
-IMG_HEIGHT = opt.img_height
 
-dataset, metadata = tfds.load('cycle_gan/horse2zebra',
-                              with_info=True, as_supervised=True)
+train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
+for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
+    if filename.endswith('.npy'):
+        train_piano[e] = np.load(filename)
 
-train_horses, train_zebras = dataset['trainA'], dataset['trainB']
-test_horses, test_zebras = dataset['testA'], dataset['testB']
-
-dataset, metadata = tfds.load('cycle_gan/horse2zebra',
-                              with_info=True, as_supervised=True)
-
-train_horses, train_zebras = dataset['trainA'], dataset['trainB']
-test_horses, test_zebras = dataset['testA'], dataset['testB']
+train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
+for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
+    if filename.endswith('.npy'):
+        train_flute[e] = np.load(filename)
 
 def random_crop(image):
   cropped_image = tf.image.random_crop(
-      image, size=[IMG_HEIGHT, IMG_WIDTH, 3])
+      image, size=[opt.img_width, opt.img_height, opt.output_channels])
 
   return cropped_image
 
@@ -46,11 +42,11 @@ def normalize(image):
   return image
 
 def random_jitter(image):
-  # resizing to 286 x 286 x 3
-  image = tf.image.resize(image, [286, 286],
+  # resizing to 360 x 270 x 1
+  image = tf.image.resize(image, [360, 270],
                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
-  # randomly cropping to 256 x 256 x 3
+  # randomly cropping to 336 x 250 x 1
   image = random_crop(image)
 
   # random mirroring
@@ -67,49 +63,32 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 
-train_horses = train_horses.map(
-    preprocess_image_train, num_parallel_calls=AUTOTUNE).shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE).cache()
-
-train_zebras = train_zebras.map(
-    preprocess_image_train, num_parallel_calls=AUTOTUNE).shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE).cache()
-
-test_horses = test_horses.map(
-    preprocess_image_test, num_parallel_calls=AUTOTUNE).shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE).cache()
-
-test_zebras = test_zebras.map(
-    preprocess_image_test, num_parallel_calls=AUTOTUNE).shuffle(
-    BUFFER_SIZE).batch(BATCH_SIZE).cache()
-
-
-sample_horse = next(iter(train_horses))
-sample_zebra = next(iter(train_zebras))
+sample_piano = train_piano[0, :, :, :]
+sample_flute = train_flute[0, :, :, :]
 
 plt.subplot(121)
-plt.title('Horse')
-img_horse = (sample_horse[0] * 0.5 + 0.5)
-plt.imshow(img_horse)
-plt.savefig(opt.sample_data_path + 'sample_horse.jpg')
+plt.title('piano')
+img_piano = (sample_piano[0] * 0.5 + 0.5)
+plt.imshow(img_piano)
+plt.savefig(opt.sample_data_path + 'sample_piano.jpg')
 
 plt.subplot(122)
-plt.title('Horse with random jitter')
-img_horse_jitter = (random_jitter(sample_horse[0]) * 0.5 + 0.5)
-plt.imshow(img_horse_jitter)
-plt.savefig(opt.sample_data_path + 'sample_horse_jitter.jpg')
+plt.title('piano with random jitter')
+img_piano_jitter = (random_jitter(sample_piano[0]) * 0.5 + 0.5)
+plt.imshow(img_piano_jitter)
+plt.savefig(opt.sample_data_path + 'sample_piano_jitter.jpg')
 
 plt.subplot(121)
-plt.title('Zebra')
-img_zebra = (sample_zebra[0] * 0.5 + 0.5)
-plt.imshow(img_zebra)
-plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
+plt.title('flute')
+img_flute = (sample_flute[0] * 0.5 + 0.5)
+plt.imshow(img_flute)
+plt.savefig(opt.sample_data_path + 'sample_flute.jpg')
 
 plt.subplot(122)
-plt.title('Zebra with random jitter')
-img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
-plt.imshow(img_zebra_jitter)
-plt.savefig(opt.sample_data_path + 'sample_zebra_jitter.jpg')
+plt.title('flute with random jitter')
+img_flute_jitter = (random_jitter(sample_flute[0]) * 0.5 + 0.5)
+plt.imshow(img_flute_jitter)
+plt.savefig(opt.sample_data_path + 'sample_flute_jitter.jpg')
     
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
