@@ -86,7 +86,7 @@ plt.savefig(opt.sample_data_path + 'sample_flute.jpg')
 
 plt.subplot(122)
 plt.title('flute with random jitter')
-img_flute_jitter = np.squueze((random_jitter(sample_flute) * 0.5 + 0.5), axis=-1)
+img_flute_jitter = np.squeeze((random_jitter(sample_flute) * 0.5 + 0.5), axis=-1)
 plt.imshow(img_flute_jitter)
 plt.savefig(opt.sample_data_path + 'sample_flute_jitter.jpg')
     
