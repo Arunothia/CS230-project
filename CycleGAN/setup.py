@@ -109,7 +109,7 @@ plt.subplot(122)
 plt.title('Zebra with random jitter')
 img_zebra_jitter = (random_jitter(sample_zebra[0]) * 0.5 + 0.5)
 plt.imshow(img_zebra_jitter)
-plt.savefig(opt.sample_data_path + 'sample_zebra.jpg')
+plt.savefig(opt.sample_data_path + 'sample_zebra_jitter.jpg')
     
 def generate_images(model, test_input, epoch):
   prediction = model(test_input)
