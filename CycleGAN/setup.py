@@ -1,5 +1,12 @@
 import matplotlib
-matplotlib.use('TkAgg')
+i = 0
+while i < 10:
+    i += 1
+    try:
+        matplotlib.use('TkAgg')
+        break
+    except:
+        print(i)
 
 import matplotlib.pyplot as plt
 import tensorflow as tf
