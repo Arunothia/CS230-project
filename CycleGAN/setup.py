@@ -63,30 +63,30 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 
-sample_piano = np.expand_dims(train_piano[0, :, :, :], axis=0)
-sample_flute = np.expand_dims(train_flute[0, :, :, :], axis=0)
+sample_piano = train_piano[0, :, :, :]
+sample_flute = train_flute[0, :, :, :]
 
 plt.subplot(121)
 plt.title('piano')
-img_piano = np.squeeze((sample_piano * 0.5 + 0.5), axis=-1)
+img_piano = sample_piano * 0.5 + 0.5
 plt.imshow(img_piano)
 plt.savefig(opt.sample_data_path + 'sample_piano.jpg')
 
 plt.subplot(122)
 plt.title('piano with random jitter')
-img_piano_jitter = np.squeeze((random_jitter(sample_piano) * 0.5 + 0.5), axis=-1)
+img_piano_jitter = random_jitter(sample_piano) * 0.5 + 0.5
 plt.imshow(img_piano_jitter)
 plt.savefig(opt.sample_data_path + 'sample_piano_jitter.jpg')
 
 plt.subplot(121)
 plt.title('flute')
-img_flute = np.squeeze((sample_flute * 0.5 + 0.5), axis=-1)
+img_flute = sample_flute * 0.5 + 0.5
 plt.imshow(img_flute)
 plt.savefig(opt.sample_data_path + 'sample_flute.jpg')
 
 plt.subplot(122)
 plt.title('flute with random jitter')
-img_flute_jitter = np.squeeze((random_jitter(sample_flute) * 0.5 + 0.5), axis=-1)
+img_flute_jitter = random_jitter(sample_flute) * 0.5 + 0.5
 plt.imshow(img_flute_jitter)
 plt.savefig(opt.sample_data_path + 'sample_flute_jitter.jpg')
     
