@@ -22,12 +22,12 @@ BATCH_SIZE = opt.batch_size
 train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
     if filename.endswith('.npy'):
-        train_piano[e] = np.expand_dims(np.load(opt.input_data_piano_path+filename), axis=-1)
+        train_piano[e] = pad_zeros(np.load(opt.input_data_piano_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
 
 train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
     if filename.endswith('.npy'):
-        train_flute[e] = np.expand_dims(np.load(opt.input_data_flute_path+filename), axis=-1)
+        train_flute[e] = pad_zeros(np.load(opt.input_data_flute_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
 
 def random_crop(image):
   cropped_image = tf.image.random_crop(
