@@ -12,8 +12,8 @@ discriminator_x = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=Fa
 discriminator_y = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 
 
-to_flute = generator_g(setup.sample_piano)
-to_piano = generator_f(setup.sample_flute)
+to_flute = generator_g(setup.np.expand_dims(setup.sample_piano, axis=0))
+to_piano = generator_f(setup.np.expand_dims(setup.sample_flute, axis=0))
 setup.plt.figure(figsize=(8, 8))
 contrast = 8
 
