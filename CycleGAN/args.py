@@ -15,6 +15,7 @@ def get_setup_args():
     parser.add_argument("--lambd", type=int, default=10, help="Lambda for calculating loss")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--buffer_size", type=int, default=1000, help="buffer size")
+    parser.add_argument("--img_size", type=int, default=352, help="Size of preprocessed image - % 32 == 0")
     parser.add_argument("--img_width", type=int, default=336, help="Width of Image")
     parser.add_argument("--img_height", type=int, default=250, help="Height of Image")
     parser.add_argument("--train_size", type=int, default=75, help="Number of train images")

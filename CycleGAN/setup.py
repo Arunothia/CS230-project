@@ -21,7 +21,7 @@ BATCH_SIZE = opt.batch_size
 
 def random_crop(image):
   cropped_image = tf.image.random_crop(
-      image, size=[opt.img_width, opt.img_height, opt.output_channels])
+      image, size=[opt.img_size, opt.img_size, opt.output_channels])
 
   return cropped_image
 
@@ -32,11 +32,11 @@ def normalize(image):
   return image
 
 def random_jitter(image):
-  # resizing to 360 x 270 x 3
-  image = tf.image.resize(image, [360, 270],
+  # resizing to 384 x 384 x 3
+  image = tf.image.resize(image, [384, 384],
                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
-  # randomly cropping to 336 x 250 x 3
+  # randomly cropping to 352 x 352 x 3
   image = random_crop(image)
 
   # random mirroring
@@ -45,9 +45,8 @@ def random_jitter(image):
   return image
 
 def pad_zeros(image):
-  # resizing to 336 x 336 x 3
-  print(image.shape)
-  return np.pad(image, ((0, 0), (0, opt.img_width-opt.img_height), (0,0)), 'constant')
+  # resizing to 352 x 352 x 3
+  return np.pad(image, ((0, opt.img_size-opt.img_width), (0, opt.img_size-opt.img_height), (0,0)), 'constant')
 
 def preprocess_image_train(image, label):
   image = random_jitter(image)
@@ -58,13 +57,13 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 
-train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_width, opt.output_channels))
+train_piano = np.zeros((opt.train_size, opt.img_size, opt.img_size, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
     if filename.endswith('.npy'):
         piano_input = np.repeat(np.expand_dims(np.load(opt.input_data_piano_path+filename), axis=-1), 3, axis=-1)
         train_piano[e] = pad_zeros(piano_input)
 
-train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_width, opt.output_channels))
+train_flute = np.zeros((opt.train_size, opt.img_size, opt.img_size, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
     if filename.endswith('.npy'):
         flute_input = np.repeat(np.expand_dims(np.load(opt.input_data_flute_path+filename), axis=-1), 3, axis=-1)
