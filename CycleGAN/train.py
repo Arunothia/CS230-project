@@ -12,13 +12,13 @@ discriminator_x = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=Fa
 discriminator_y = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 
 
-to_zebra = generator_g(setup.sample_horse)
-to_horse = generator_f(setup.sample_zebra)
+to_flute = generator_g(setup.sample_piano)
+to_piano = generator_f(setup.sample_flute)
 setup.plt.figure(figsize=(8, 8))
 contrast = 8
 
-imgs = [setup.sample_horse, to_zebra, setup.sample_zebra, to_horse]
-title = ['Horse', 'To Zebra', 'Zebra', 'To Horse']
+imgs = [setup.sample_piano, to_flute, setup.sample_flute, to_piano]
+title = ['piano', 'To flute', 'flute', 'To piano']
 
 for i in range(len(imgs)):
   setup.plt.subplot(2, 2, i+1)
@@ -32,13 +32,14 @@ setup.plt.show()
 setup.plt.figure(figsize=(8, 8))
 
 setup.plt.subplot(121)
-setup.plt.title('Is a real zebra?')
-setup.plt.imshow(discriminator_y(setup.sample_zebra)[0, ..., -1], cmap='RdBu_r')
+setup.plt.title('Is a real flute?')
+setup.plt.imshow(discriminator_y(setup.sample_flute)[0, ..., -1], cmap='RdBu_r')
+plt.savefig(opt.sample_data_path + 'is-real-flute.jpg')
 
 setup.plt.subplot(122)
-setup.plt.title('Is a real horse?')
-setup.plt.imshow(discriminator_x(setup.sample_horse)[0, ..., -1], cmap='RdBu_r')
-
+setup.plt.title('Is a real piano?')
+setup.plt.imshow(discriminator_x(setup.sample_piano)[0, ..., -1], cmap='RdBu_r')
+plt.savefig(opt.sample_data_path + 'is-real-piano.jpg')
 setup.plt.show()
 
 generator_g_optimizer = setup.tf.keras.optimizers.Adam(opt.lr, beta_1=opt.b1)
@@ -130,16 +131,16 @@ for epoch in range(opt.num_epochs):
   start = setup.time.time()
 
   n = 0
-  for image_x, image_y in setup.tf.data.Dataset.zip((setup.train_horses, setup.train_zebras)):
+  for image_x, image_y in setup.tf.data.Dataset.zip((setup.train_piano, setup.train_flute)):
     train_step(image_x, image_y)
     if n % 10 == 0:
       print ('.', end='')
     n += 1
 
   clear_output(wait=True)
-  # Using a consistent image (sample_horse) so that the progress of the model
+  # Using a consistent image (sample_piano) so that the progress of the model
   # is clearly visible.
-  generate_images(generator_g, setup.sample_horse, epoch)
+  generate_images(generator_g, setup.sample_piano, epoch)
 
   if (epoch + 1) % opt.checkpoint_epochs == 0:
     ckpt_save_path = ckpt_manager.save()
