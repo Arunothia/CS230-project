@@ -11,12 +11,14 @@ generator_f = setup.pix2pix.unet_generator(opt.output_channels, norm_type=opt.no
 discriminator_x = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 discriminator_y = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 
-to_flute = generator_g(setup.np.expand_dims(setup.sample_piano, axis=0))
-to_piano = generator_f(setup.np.expand_dims(setup.sample_flute, axis=0))
+piano_input = setup.pad_zeros(setup.np.expand_dims(setup.sample_piano, axis=0))
+to_piano = generator_g(piano_input)
+flute_input = setup.pad_zeros(setup.np.expand_dims(setup.sample_flute, axis=0))
+to_flute = generator_f(flute_input)
 setup.plt.figure(figsize=(8, 8))
 contrast = 8
 
-imgs = [setup.sample_piano, to_flute, setup.sample_flute, to_piano]
+imgs = [piano_input, to_flute, flute_input, to_piano]
 title = ['piano', 'To flute', 'flute', 'To piano']
 
 for i in range(len(imgs)):
