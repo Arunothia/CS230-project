@@ -57,7 +57,7 @@ def random_jitter(image):
 def pad_zeros(image):
   # resizing to 336 x 336 x 3
   print(image.shape)
-  return np.pad(image, ((0, 0), (34, 34), (0,0)), 'constant', constant_values=(0,0,0))
+  return np.pad(image, ((0, 0), (0, 336-250), (0,0)), 'constant')
 
 def preprocess_image_train(image, label):
   image = random_jitter(image)
