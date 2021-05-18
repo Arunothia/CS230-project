@@ -42,11 +42,11 @@ def normalize(image):
   return image
 
 def random_jitter(image):
-  # resizing to 360 x 270 x 1
+  # resizing to 360 x 270 x 3
   image = tf.image.resize(image, [360, 270],
                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
-  # randomly cropping to 336 x 250 x 1
+  # randomly cropping to 336 x 250 x 3
   image = random_crop(image)
 
   # random mirroring
