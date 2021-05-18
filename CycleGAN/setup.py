@@ -47,7 +47,7 @@ def random_jitter(image):
 def pad_zeros(image):
   # resizing to 336 x 336 x 3
   print(image.shape)
-  return np.pad(image, ((0, 0), (0, 336-250), (0,0)), 'constant')
+  return np.pad(image, ((0, 0), (0, opt.img_width-opt.img_height), (0,0)), 'constant')
 
 def preprocess_image_train(image, label):
   image = random_jitter(image)
@@ -61,12 +61,14 @@ def preprocess_image_test(image, label):
 train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
     if filename.endswith('.npy'):
-        train_piano[e] = pad_zeros(np.load(opt.input_data_piano_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
+        piano_input = np.repeat(np.expand_dims(np.load(opt.input_data_piano_path+filename), axis=-1), 3, axis=-1)
+        train_piano[e] = pad_zeros(piano_input)
 
 train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
 for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
     if filename.endswith('.npy'):
-        train_flute[e] = pad_zeros(np.load(opt.input_data_flute_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
+        flute_input = np.repeat(np.expand_dims(np.load(opt.input_data_flute_path+filename), axis=-1), 3, axis=-1)
+        train_flute[e] = pad_zeros(flute_input)
 
 sample_piano = train_piano[0, :, :, :]
 sample_flute = train_flute[0, :, :, :]
