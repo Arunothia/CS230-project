@@ -19,16 +19,6 @@ AUTOTUNE = tf.data.AUTOTUNE
 BUFFER_SIZE = opt.buffer_size
 BATCH_SIZE = opt.batch_size
 
-train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
-for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
-    if filename.endswith('.npy'):
-        train_piano[e] = pad_zeros(np.load(opt.input_data_piano_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
-
-train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
-for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
-    if filename.endswith('.npy'):
-        train_flute[e] = pad_zeros(np.load(opt.input_data_flute_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
-
 def random_crop(image):
   cropped_image = tf.image.random_crop(
       image, size=[opt.img_width, opt.img_height, opt.output_channels])
@@ -67,6 +57,16 @@ def preprocess_image_train(image, label):
 def preprocess_image_test(image, label):
   image = normalize(image)
   return image
+
+train_piano = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
+for e,filename in enumerate(os.listdir(opt.input_data_piano_path)):
+    if filename.endswith('.npy'):
+        train_piano[e] = pad_zeros(np.load(opt.input_data_piano_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
+
+train_flute = np.zeros((opt.train_size, opt.img_width, opt.img_height, opt.output_channels))
+for e,filename in enumerate(os.listdir(opt.input_data_flute_path)):
+    if filename.endswith('.npy'):
+        train_flute[e] = pad_zeros(np.load(opt.input_data_flute_path+filename).reshape(opt.img_width, opt.img_height, opt.output_channels))
 
 sample_piano = train_piano[0, :, :, :]
 sample_flute = train_flute[0, :, :, :]
