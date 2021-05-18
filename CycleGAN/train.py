@@ -11,12 +11,8 @@ generator_f = setup.pix2pix.unet_generator(opt.output_channels, norm_type=opt.no
 discriminator_x = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 discriminator_y = setup.pix2pix.discriminator(norm_type=opt.norm_type, target=False)
 
-flute_input = setup.np.repeat(setup.np.expand_dims(setup.sample_piano, axis=0), 3, axis=-1)
-print(flute_input.shape)
-to_flute = generator_g(flute_input)
-piano_input = setup.np.repeat(setup.np.expand_dims(setup.sample_flute, axis=0), 3, axis=-1)
-print(piano_input.shape)
-to_piano = generator_f(piano_input)
+to_flute = generator_g(setup.sample_piano)
+to_piano = generator_f(setup.sample_flute)
 setup.plt.figure(figsize=(8, 8))
 contrast = 8
 
