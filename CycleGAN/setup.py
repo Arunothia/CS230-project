@@ -63,8 +63,8 @@ def preprocess_image_test(image, label):
   image = normalize(image)
   return image
 
-sample_piano = train_piano[0, :, :, :]
-sample_flute = train_flute[0, :, :, :]
+sample_piano = np.expand_dims(train_piano[0, :, :, :], axis=0)
+sample_flute = np.expand_dims(train_flute[0, :, :, :], axis=0)
 
 plt.subplot(121)
 plt.title('piano')
