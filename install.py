@@ -14,3 +14,8 @@ install("IPython")
 install("tensorflow")
 upgrade("tensorflow")
 install("tensorflow-datasets")
+install("midi2audio")
+install("pydub")
+
+# Other installations needed
+# sudo apt-get install fluidsynth
