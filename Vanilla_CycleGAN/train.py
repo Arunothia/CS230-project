@@ -119,7 +119,7 @@ def main():
     )
 
   dataset = PianoFluteDataset(
-    root_piano=config.PIANO_DIR, root_flute=config.FLUTE_DIR, tranform=config.transforms
+    root_piano=config.PIANO_DIR, root_flute=config.FLUTE_DIR, transform=config.transforms
   )
 
   loader = DataLoader(
