@@ -3,6 +3,10 @@ from torch.utils.data import Dataset
 import os
 import numpy as np
 
+def pad_zeros(image):
+  # resizing to 352 x 352 when original size is 336 x 250
+  return np.pad(image, ((0, 16), (0, 102)), 'constant')
+
 class PianoFluteDataset(Dataset):
     def __init__(self, root_piano, root_flute, transform=None):
         self.root_piano = root_piano
@@ -26,8 +30,8 @@ class PianoFluteDataset(Dataset):
         flute_path = os.path.join(self.root_flute, flute_image)
         piano_path = os.path.join(self.root_piano, piano_image)
 
-        flute_img = np.array(Image.open(flute_path).Convert("RGB"))
-        piano_img = np.array(Image.open(piano_path).Convert("RGB"))
+        flute_img = np.repeat(np.expand_dims(pad_zeros(np.load(flute_path)), axis=-1), 3, axis=-1)
+        piano_img = np.repeat(np.expand_dims(pad_zeros(np.load(piano_path)), axis=-1), 3, axis=-1)
 
         if self.transform:
             augmentations = self.transform(image=flute_img, image0=piano_img)
