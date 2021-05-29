@@ -30,8 +30,6 @@ def getPair(file):
     flute_img = augmentations["image"]
     piano_img = augmentations["image0"]
     
-    print(flute_img.shape)
-    print(piano_img.shape)
     return flute_img, piano_img
 
 def test():
@@ -57,6 +55,7 @@ def main():
 
   for file in ["andersen41-14_chunk6.npy", "bor_ps2_chunk12.npy", "mz_330_2_chunk16.npy"]:
     flute_img, piano_img = getPair(file)
+    flute_img, piano_img = np.expand_dims(flute_img, axis=0), np.expand_dims(piano_img, axis=0)
     piano = piano_img.to(config.DEVICE)
     flute = flute_img.to(config.DEVICE)
     fake_flute, fake_piano = gen_F(piano), gen_P(flute)
