@@ -1,18 +1,18 @@
 import numpy as np
 import os
 
-data_folder = 'data/tempData/trainSet/'
-flute_paths = os.listdir(data_folder + 'fluteCqtChunks/')
-piano_paths = os.listdir(data_folder + 'pianoCqtChunks/')
+data_folder = '../../dataset/processedData/trainSet/'
+flute_paths = os.listdir(data_folder + 'flute/cqtChunks/')
+piano_paths = os.listdir(data_folder + 'piano/cqtChunks/')
 
 flute_array = []
 piano_array = []
 
 for file in flute_paths:
-    flute_array.append(np.load(data_folder + 'fluteCqtChunks/' + file))
+    flute_array.append(np.load(data_folder + 'flute/cqtChunks/' + file))
 
 for file in piano_paths:
-    piano_array.append(np.load(data_folder + 'pianoCqtChunks/' + file))
+    piano_array.append(np.load(data_folder + 'piano/cqtChunks/' + file))
 
 flute_mean = np.mean(flute_array)
 piano_mean = np.mean(piano_array)
