@@ -25,8 +25,8 @@ def get_setup_args():
     parser.add_argument("--input_data_val_path", type=str, default="../../dataset/processedData/testSet/", help="path to val data")
     parser.add_argument("--input_train_piano_path", type=str, default="../../dataset/processedData/trainSet/flute/cqtChunks/", help="path to piano train directory")
     parser.add_argument("--input_train_flute_path", type=str, default="../../dataset/processedData/trainSet/piano/cqtChunks/", help="path to flute train directory")
-    parser.add_argument("--input_test_flute_path", type=str, default="../../dataset/processedData/testSet/piano/cqtChunks/", help="path to flute test directory")
-    parser.add_argument("--input_test_piano_path", type=str, default="../../dataset/processedData/testSet/flute/cqtChunks/", help="path to piano test directory")
+    parser.add_argument("--input_test_flute_path", type=str, default="../../dataset/processedData/trainSet/piano/cqtChunks/", help="path to flute test directory")
+    parser.add_argument("--input_test_piano_path", type=str, default="../../dataset/processedData/trainSet/flute/cqtChunks/", help="path to piano test directory")
     parser.add_argument("--output_path", type=str, default="../../dataset/saved_images/", help="path to directory for storing model output")
     parser.add_argument("--num_workers", type=int, default=4, help="number of workers for dataloader") 
     
