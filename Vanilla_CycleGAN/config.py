@@ -29,7 +29,7 @@ transforms = A.Compose(
     [
         A.Resize(width=336, height=336),
         #A.HorizontalFlip(p=0.5),
-        A.Normalize(mean=[-6.5, -6.5], std=[5.2, 5.2], max_pixel_value=255),
+        A.Normalize(mean=-6.5, std=5.2, max_pixel_value=255),
         ToTensorV2(),
     ],
     additional_targets={"image0": "image"},
