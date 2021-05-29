@@ -20,5 +20,5 @@ piano_mean = np.mean(piano_array)
 flute_std = np.std(flute_array)
 piano_std = np.std(piano_array)
 
-print("Piano ==> mean: " + piano_mean + " std: " + piano_std)
-print("Flute ==> mean: " + flute_mean + " std: " + flute_std)
+print("Piano ==> mean: " + str(piano_mean) + " std: " + str(piano_std))
+print("Flute ==> mean: " + str(flute_mean) + " std: " + str(flute_std))
