@@ -22,3 +22,7 @@ piano_std = np.std(piano_array)
 
 print("Piano ==> mean: " + str(piano_mean) + " std: " + str(piano_std))
 print("Flute ==> mean: " + str(flute_mean) + " std: " + str(flute_std))
+
+# Output
+#Piano ==> mean: -6.4774528 std: 5.372044
+#Flute ==> mean: -6.9192457 std: 5.299747

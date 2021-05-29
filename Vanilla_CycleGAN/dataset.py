@@ -14,8 +14,8 @@ class PianoFluteDataset(Dataset):
         self.root_flute = root_flute
         self.transform = transform
 
-        self.piano_images = sample(os.listdir(root_piano), 300)
-        self.flute_images = sample(os.listdir(root_flute), 300)
+        self.piano_images = sample(os.listdir(root_piano), 8000)
+        self.flute_images = sample(os.listdir(root_flute), 8000)
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
