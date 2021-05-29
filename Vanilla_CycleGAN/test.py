@@ -55,7 +55,7 @@ def main():
 
   for file in ["andersen41-14_chunk6.npy", "bor_ps2_chunk12.npy", "mz_330_2_chunk16.npy"]:
     flute_img, piano_img = getPair(file)
-    flute_img, piano_img = np.expand_dims(flute_img, axis=0), np.expand_dims(piano_img, axis=0)
+    flute_img, piano_img = torch.from_numpy(np.expand_dims(flute_img, axis=0)), torch.from_numpy(np.expand_dims(piano_img, axis=0))
     fake_flute, fake_piano = gen_F(piano_img), gen_P(flute_img)
     save_image(fake_piano, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
     save_image(fake_flute, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
