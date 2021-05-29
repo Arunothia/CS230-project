@@ -9,7 +9,10 @@ flute_array = []
 piano_array = []
 
 for file in flute_paths:
-    flute_array.append(np.load(data_folder + 'flute/cqtChunks/' + file))
+    x = np.load(data_folder + 'flute/cqtChunks/' + file)
+    print(file)
+    np.mean(x)
+    flute_array.append(x)
 
 for file in piano_paths:
     piano_array.append(np.load(data_folder + 'piano/cqtChunks/' + file))
