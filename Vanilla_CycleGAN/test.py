@@ -30,6 +30,8 @@ def getPair(file):
     flute_img = augmentations["image"]
     piano_img = augmentations["image0"]
     
+    print(flute_img.shape)
+    print(piano_img.shape)
     return flute_img, piano_img
 
 def test():
