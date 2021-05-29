@@ -60,6 +60,8 @@ def main():
     fake_flute, fake_piano = gen_F(piano_img), gen_P(flute_img)
     save_image(fake_piano*0.5+0.5, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
     save_image(fake_flute*0.5+0.5, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
+    save_image(piano_img*0.5+0.5, config.SAVED_IMAGES_DIR+f"piano_{file}.png")
+    save_image(flute_img*0.5+0.5, config.SAVED_IMAGES_DIR+f"flute_{file}.png")
 
 if __name__ == "__main__":
   main()
