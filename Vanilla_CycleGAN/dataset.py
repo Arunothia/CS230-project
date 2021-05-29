@@ -2,10 +2,11 @@ from PIL import Image
 from torch.utils.data import Dataset
 import os
 import numpy as np
+from random import sample
 
 def pad_zeros(image):
-  # resizing to 352 x 352 when original size is 336 x 250
-  return np.pad(image, ((0, 16), (0, 102)), 'constant')
+  # resizing to 336 x 336 when original size is 336 x 250
+  return np.pad(image, ((0, 0), (0, 86)), 'constant')
 
 class PianoFluteDataset(Dataset):
     def __init__(self, root_piano, root_flute, transform=None):
@@ -13,8 +14,8 @@ class PianoFluteDataset(Dataset):
         self.root_flute = root_flute
         self.transform = transform
 
-        self.piano_images = os.listdir(root_piano)
-        self.flute_images = os.listdir(root_flute)
+        self.piano_images = sample(os.listdir(root_piano), 300)
+        self.flute_images = sample(os.listdir(root_flute), 300)
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
@@ -30,8 +31,8 @@ class PianoFluteDataset(Dataset):
         flute_path = os.path.join(self.root_flute, flute_image)
         piano_path = os.path.join(self.root_piano, piano_image)
 
-        flute_img = np.repeat(np.expand_dims(pad_zeros(np.load(flute_path)), axis=-1), 3, axis=-1)
-        piano_img = np.repeat(np.expand_dims(pad_zeros(np.load(piano_path)), axis=-1), 3, axis=-1)
+        flute_img = np.repeat(np.expand_dims(pad_zeros(np.load(flute_path)), axis=-1), 1, axis=-1)
+        piano_img = np.repeat(np.expand_dims(pad_zeros(np.load(piano_path)), axis=-1), 1, axis=-1)
 
         if self.transform:
             augmentations = self.transform(image=flute_img, image0=piano_img)

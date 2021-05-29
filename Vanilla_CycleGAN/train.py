@@ -79,15 +79,15 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       g_scaler.step(opt_gen)
       g_scaler.update()
 
-      if idx % 200 == 0:
-        save_image(fake_piano*0.5+0.5, f"../../dataset/saved_images/piano_{idx}.png")
-        save_image(fake_flute*0.5+0.5, f"../../dataset/saved_images/flute_{idx}.png")
+      if idx % 5 == 0:
+        save_image(fake_piano*0.5+0.5, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
+        save_image(fake_flute*0.5+0.5, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
 
 def main():
-  disc_P = Discriminator(in_channels=3).to(config.DEVICE)
-  disc_F = Discriminator(in_channels=3).to(config.DEVICE)
-  gen_P = Generator(img_channels=3, num_residuals=9).to(config.DEVICE)
-  gen_F = Generator(img_channels=3, num_residuals=9).to(config.DEVICE)
+  disc_P = Discriminator(in_channels=1).to(config.DEVICE)
+  disc_F = Discriminator(in_channels=1).to(config.DEVICE)
+  gen_P = Generator(img_channels=1, num_residuals=9).to(config.DEVICE)
+  gen_F = Generator(img_channels=1, num_residuals=9).to(config.DEVICE)
 
   opt_disc = optim.Adam(
     list(disc_P.parameters()) + list(disc_F.parameters()),
