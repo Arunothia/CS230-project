@@ -26,7 +26,7 @@ def getPair(file):
     flute_img = np.exp(flute_img)
     piano_img = np.exp(piano_img)
     
-    augmentations = config.transform(image=flute_img, image0=piano_img)
+    augmentations = config.transforms(image=flute_img, image0=piano_img)
     flute_img = augmentations["image"]
     piano_img = augmentations["image0"]
     
