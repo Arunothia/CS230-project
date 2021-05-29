@@ -11,6 +11,7 @@ TRAIN_DIR = opt.input_data_train_path
 VAL_DIR = opt.input_data_val_path
 PIANO_DIR = opt.input_data_piano_path
 FLUTE_DIR = opt.input_data_flute_path
+SAVED_IMAGES_DIR = opt.output_path
 BATCH_SIZE = opt.batch_size
 LEARNING_RATE = opt.lr
 LAMBDA_IDENTITY = opt.lambda_identity
@@ -26,9 +27,9 @@ CHECKPOINT_CRITIC_F = "criticf.pth.tar"
 
 transforms = A.Compose(
     [
-        A.Resize(width=352, height=352),
-        A.HorizontalFlip(p=0.5),
-        A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255),
+        A.Resize(width=336, height=336),
+        #A.HorizontalFlip(p=0.5),
+        #A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255),
         ToTensorV2(),
     ],
     additional_targets={"image0": "image"},
