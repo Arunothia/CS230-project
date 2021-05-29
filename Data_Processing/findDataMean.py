@@ -11,7 +11,7 @@ piano_array = []
 for file in flute_paths:
     x = np.load(data_folder + 'flute/cqtChunks/' + file)
     print(file)
-    np.mean(x)
+    print(np.mean(x))
     flute_array.append(x)
 
 for file in piano_paths:
