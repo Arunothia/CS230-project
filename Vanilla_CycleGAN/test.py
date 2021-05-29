@@ -37,16 +37,8 @@ def test():
 
 
 def main():
-  disc_P = Discriminator(in_channels=1).to(config.DEVICE)
-  disc_F = Discriminator(in_channels=1).to(config.DEVICE)
   gen_P = Generator(img_channels=1, num_residuals=9).to(config.DEVICE)
   gen_F = Generator(img_channels=1, num_residuals=9).to(config.DEVICE)
-
-  opt_disc = optim.Adam(
-    list(disc_P.parameters()) + list(disc_F.parameters()),
-    lr = config.LEARNING_RATE,
-    betas=(0.5, 0.999),
-  )
 
   opt_gen = optim.Adam(
     list(gen_P.parameters()) + list(gen_F.parameters()),
@@ -60,13 +52,7 @@ def main():
   load_checkpoint(
     config.CHECKPOINT_GEN_F, gen_F, opt_gen, config.LEARNING_RATE,
   )
-  load_checkpoint(
-    config.CHECKPOINT_CRITIC_P, disc_P, opt_disc, config.LEARNING_RATE,
-  )
-  load_checkpoint(
-    config.CHECKPOINT_CRITIC_F, disc_F, opt_disc, config.LEARNING_RATE,
-  )
- 
+  
   dataset = PianoFluteDataset(
     root_piano=config.PIANO_TEST_DIR, root_flute=config.FLUTE_TEST_DIR, transform=config.transforms
   )
