@@ -23,8 +23,8 @@ def get_setup_args():
     parser.add_argument("--sample_data_path", type=str, default="../../dataset/sample/", help="path to root sample data directory")
     parser.add_argument("--input_data_train_path", type=str, default="../../dataset/tempData/trainSet/", help="path to train data")
     parser.add_argument("--input_data_val_path", type=str, default="../../dataset/tempData/testSet/", help="path to val data")
-    parser.add_argument("--input_data_piano_path", type=str, default="../../dataset/tempData/trainSet/pianoCqtChunks/", help="path to piano data directory")
-    parser.add_argument("--input_data_flute_path", type=str, default="../../dataset/tempData/trainSet/fluteCqtChunks/", help="path to flute data directory")
+    parser.add_argument("--input_data_piano_path", type=str, default="../../dataset/tempData/trainSet/piano/CqtChunks/", help="path to piano data directory")
+    parser.add_argument("--input_data_flute_path", type=str, default="../../dataset/tempData/trainSet/flute/CqtChunks/", help="path to flute data directory")
     parser.add_argument("--output_path", type=str, default="../../dataset/saved_images/", help="path to directory for storing model output")
     parser.add_argument("--num_workers", type=int, default=4, help="number of workers for dataloader") 
     
