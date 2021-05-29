@@ -52,10 +52,6 @@ def main():
   load_checkpoint(
     config.CHECKPOINT_GEN_F, gen_F, opt_gen, config.LEARNING_RATE,
   )
-  
-  dataset = PianoFluteDataset(
-    root_piano=config.PIANO_TEST_DIR, root_flute=config.FLUTE_TEST_DIR, transform=config.transforms
-  )
 
   for file in ["andersen41-14_chunk6.npy", "bor_ps2_chunk12.npy", "mz_330_2_chunk16.npy"]:
     flute_img, piano_img = getPair(file)
