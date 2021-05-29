@@ -9,21 +9,16 @@ flute_array = []
 piano_array = []
 
 for file in flute_paths:
-    x = np.load(data_folder + 'flute/cqtChunks/' + file)
-    #m = np.mean(x)
-    #if m < -30:
-    #    print(file)
-    #    print(m)
-    flute_array.append(x)
+    flute_array.append(np.load(data_folder + 'flute/cqtChunks/' + file))
 
 for file in piano_paths:
     piano_array.append(np.load(data_folder + 'piano/cqtChunks/' + file))
 
-flute_mean = flute_array.mean(axis=tuple(range(1, 2)))
-piano_mean = piano_array.mean(axis=tuple(range(1, 2)))
+flute_mean = np.mean(flute_array)
+piano_mean = np.mean(piano_array)
 
-flute_std = flute_array.std(axis=tuple(range(1, 2)))
-piano_std = piano_array.std(axis=tuple(range(1, 2)))
+flute_std = np.std(flute_array)
+piano_std = np.std(piano_array)
 
 print("Piano ==> mean: " + str(piano_mean) + " std: " + str(piano_std))
 print("Flute ==> mean: " + str(flute_mean) + " std: " + str(flute_std))
