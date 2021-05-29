@@ -71,7 +71,7 @@ def main():
     root_piano=config.PIANO_TEST_DIR, root_flute=config.FLUTE_TEST_DIR, transform=config.transforms
   )
 
-  for file in ["", "", ""]:
+  for file in ["andersen41-14_chunk6.npy", "bor_ps2_chunk12.npy", "mz_330_2_chunk16.npy"]:
     flute_img, piano_img = getPair(file)
     fake_flute, fake_piano = gen_F(piano_img), gen_P(flute_img)
     save_image(fake_piano, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")

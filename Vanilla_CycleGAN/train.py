@@ -79,7 +79,7 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       g_scaler.step(opt_gen)
       g_scaler.update()
 
-      if idx % 5 == 0:
+      if idx % 200 == 0:
         save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
         save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
 
