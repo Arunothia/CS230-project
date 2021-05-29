@@ -2,6 +2,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 import os
 import numpy as np
+from random import sample
 
 def pad_zeros(image):
   # resizing to 336 x 336 when original size is 336 x 250
@@ -13,8 +14,8 @@ class PianoFluteDataset(Dataset):
         self.root_flute = root_flute
         self.transform = transform
 
-        self.piano_images = os.listdir(root_piano)
-        self.flute_images = os.listdir(root_flute)
+        self.piano_images = sample(os.listdir(root_piano), 300)
+        self.flute_images = sample(os.listdir(root_flute), 300)
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
