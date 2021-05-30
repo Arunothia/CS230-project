@@ -9,8 +9,10 @@ opt = args.get_setup_args()
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 TRAIN_DIR = opt.input_data_train_path
 VAL_DIR = opt.input_data_val_path
-PIANO_DIR = opt.input_data_piano_path
-FLUTE_DIR = opt.input_data_flute_path
+PIANO_TRAIN_DIR = opt.input_train_piano_path
+FLUTE_TRAIN_DIR = opt.input_train_flute_path
+PIANO_TEST_DIR = opt.input_test_piano_path
+FLUTE_TEST_DIR = opt.input_test_flute_path
 SAVED_IMAGES_DIR = opt.output_path
 BATCH_SIZE = opt.batch_size
 LEARNING_RATE = opt.lr
@@ -29,7 +31,7 @@ transforms = A.Compose(
     [
         A.Resize(width=336, height=336),
         #A.HorizontalFlip(p=0.5),
-        #A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], max_pixel_value=255),
+        #A.Normalize(mean=0.5, std=0.5, max_pixel_value=255),
         ToTensorV2(),
     ],
     additional_targets={"image0": "image"},

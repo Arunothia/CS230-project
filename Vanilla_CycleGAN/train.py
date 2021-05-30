@@ -79,9 +79,9 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       g_scaler.step(opt_gen)
       g_scaler.update()
 
-      if idx % 5 == 0:
-        save_image(fake_piano*0.5+0.5, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
-        save_image(fake_flute*0.5+0.5, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
+      if idx % 200 == 0:
+        save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
+        save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
 
 def main():
   disc_P = Discriminator(in_channels=1).to(config.DEVICE)
@@ -119,7 +119,7 @@ def main():
     )
 
   dataset = PianoFluteDataset(
-    root_piano=config.PIANO_DIR, root_flute=config.FLUTE_DIR, transform=config.transforms
+    root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms
   )
 
   loader = DataLoader(
