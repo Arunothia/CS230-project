@@ -18,7 +18,7 @@ def train_fn(disc, gen, loader, opt_disc, opt_gen, l1, bce, g_scaler, d_scaler):
         x, y = x.to(config.DEVICE), y.to(config.DEVICE)
 
         # Train Discriminator
-        with torch.cuda.amp.autpcast():
+        with torch.cuda.amp.autocast():
             y_fake = gen(x)
             D_real = disc(x, y)
             D_fake = disc(x, y_fake.detach())
