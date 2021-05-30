@@ -82,7 +82,7 @@ def main():
 
         if config.SAVE_MODEL and epoch % 5 == 0:
             save_checkpoint(gen, opt_gen, filename=config.CHECKPOINT_GEN)
-            save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_DISC)
+            save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_CRITIC)
         
         save_some_examples(gen, val_loader, epoch, folder="evaluation")
 
