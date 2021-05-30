@@ -84,7 +84,7 @@ def main():
             save_checkpoint(gen, opt_gen, filename=config.CHECKPOINT_GEN)
             save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_CRITIC)
         
-        save_some_examples(gen, val_loader, epoch, folder="evaluation")
+        save_some_examples(gen, val_loader, epoch, folder=config.SAVED_IMAGES_DIR)
 
 if __name__ == "__main__":
     main()
