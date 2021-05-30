@@ -59,9 +59,15 @@ def main():
     flute_img, piano_img = flute_img.to(config.DEVICE), piano_img.to(config.DEVICE)
     fake_flute, fake_piano = gen_F(piano_img), gen_P(flute_img)
     save_image(fake_piano, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
-    save_image(fake_flute, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
+    save_image(fake_flute, config.SAVED_IMAGES_DIR+f"fake_flute_{file}.png")
     save_image(piano_img, config.SAVED_IMAGES_DIR+f"piano_{file}.png")
     save_image(flute_img, config.SAVED_IMAGES_DIR+f"flute_{file}.png")
+    cycled_flute, cycled_piano = gen_F(fake_piano), gen_P(fake_flute)
+    identity_flute, identity_piano = gen_F(flute_img), gen_P(piano_img)
+    save_image(cycled_piano, config.SAVED_IMAGES_DIR+f"cycled_piano_{file}.png")
+    save_image(cycled_flute, config.SAVED_IMAGES_DIR+f"cycled_flute_{file}.png")
+    save_image(identity_piano, config.SAVED_IMAGES_DIR+f"identity_piano_{file}.png")
+    save_image(identity_flute, config.SAVED_IMAGES_DIR+f"identity_flute_{file}.png")
 
 if __name__ == "__main__":
   main()
