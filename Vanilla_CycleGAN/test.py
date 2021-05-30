@@ -58,10 +58,10 @@ def main():
     flute_img, piano_img = torch.from_numpy(np.expand_dims(flute_img, axis=0)), torch.from_numpy(np.expand_dims(piano_img, axis=0))
     flute_img, piano_img = flute_img.to(config.DEVICE), piano_img.to(config.DEVICE)
     fake_flute, fake_piano = gen_F(piano_img), gen_P(flute_img)
-    save_image(fake_piano*0.5+0.5, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
-    save_image(fake_flute*0.5+0.5, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
-    save_image(piano_img*0.5+0.5, config.SAVED_IMAGES_DIR+f"piano_{file}.png")
-    save_image(flute_img*0.5+0.5, config.SAVED_IMAGES_DIR+f"flute_{file}.png")
+    save_image(fake_piano, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
+    save_image(fake_flute, config.SAVED_IMAGES_DIR+f"fake_piano_{file}.png")
+    save_image(piano_img, config.SAVED_IMAGES_DIR+f"piano_{file}.png")
+    save_image(flute_img, config.SAVED_IMAGES_DIR+f"flute_{file}.png")
 
 if __name__ == "__main__":
   main()
