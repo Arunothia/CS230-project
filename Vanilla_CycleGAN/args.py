@@ -3,7 +3,7 @@ import argparse
 def get_setup_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", type=str, default="CQT-CycleGAN", help="model name or version")
-    parser.add_argument("--num_epochs", type=int, default=1, help="number of epochs of training")
+    parser.add_argument("--num_epochs", type=int, default=5, help="number of epochs of training")
     parser.add_argument("--output_channels", type=int, default=3, help="number of output channels")
     parser.add_argument("--norm_type", type=str, default="instancenorm", help="type of normalization")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
@@ -13,7 +13,7 @@ def get_setup_args():
     parser.add_argument("--checkpoints_keep", type=int, default=3, help="maximum checkpoints to keep")
     parser.add_argument("--checkpoint_epochs", type=int, default=1, help="number of epochs to leave between checkpoints")
     parser.add_argument("--lambd", type=int, default=10, help="Lambda for calculating loss")
-    parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
+    parser.add_argument("--batch_size", type=int, default=16, help="size of the batches")
     parser.add_argument("--lambda_identity", type=int, default=1, help="Lambda Identity")
     parser.add_argument("--lambda_cycle", type=int, default=10, help="Lambda Cycle")
     parser.add_argument("--img_size", type=int, default=352, help="Size of preprocessed image - % 32 == 0")
