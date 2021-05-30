@@ -128,5 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Ignore models
+*.pth.tar
+
 # Ignore data folder
 /Vanilla_CycleGAN/data/
+/Pix2Pix/data
