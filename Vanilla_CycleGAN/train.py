@@ -139,8 +139,8 @@ def main():
     if config.SAVE_MODEL:
       save_checkpoint(gen_P, opt_gen, filename=config.CHECKPOINT_GEN_P)
       save_checkpoint(gen_F, opt_gen, filename=config.CHECKPOINT_GEN_F)
-      save_checkpoint(disc_P, opt_gen, filename=config.CHECKPOINT_CRITIC_P)
-      save_checkpoint(disc_F, opt_gen, filename=config.CHECKPOINT_CRITIC_F)
+      save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
+      save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
 
 if __name__ == "__main__":
   main()
