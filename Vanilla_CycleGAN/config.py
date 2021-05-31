@@ -31,7 +31,9 @@ transforms = A.Compose(
     [
         A.Resize(width=336, height=336),
         #A.HorizontalFlip(p=0.5),
-        #A.Normalize(mean=0.5, std=0.5, max_pixel_value=255),
+        # using mean = mean of flute and piano data, estimated using findDataMean.py
+        # using std = 3 * std value of flute and piano to being most data into -1,1 range
+        A.Normalize(mean=-6.7, std=16, max_pixel_value=1),
         ToTensorV2(),
     ],
     additional_targets={"image0": "image"},

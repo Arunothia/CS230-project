@@ -14,8 +14,8 @@ class PianoFluteDataset(Dataset):
         self.root_flute = root_flute
         self.transform = transform
 
-        self.piano_images = sample(os.listdir(root_piano), 8000)
-        self.flute_images = sample(os.listdir(root_flute), 8000)
+        self.piano_images = sample(os.listdir(root_piano), 12000)
+        self.flute_images = sample(os.listdir(root_flute), 12000)
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
@@ -34,8 +34,8 @@ class PianoFluteDataset(Dataset):
         flute_img = np.repeat(np.expand_dims(pad_zeros(np.load(flute_path)), axis=-1), 1, axis=-1)
         piano_img = np.repeat(np.expand_dims(pad_zeros(np.load(piano_path)), axis=-1), 1, axis=-1)
 
-        flute_img = np.exp(flute_img)
-        piano_img = np.exp(piano_img)
+        #flute_img = np.exp(flute_img)
+        #piano_img = np.exp(piano_img)
 
         if self.transform:
             augmentations = self.transform(image=flute_img, image0=piano_img)

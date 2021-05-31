@@ -7,6 +7,7 @@ import config
 from generator_model import Generator
 import numpy as np
 import soundfile as sf
+import albumentations as A
 
 
 ###########################################################
@@ -28,12 +29,27 @@ numSecondsPerChunk = 4
 
 folder = "../Pix2Pix/data/"
 #fluteWavFile = "mist-flute-chill-melody_112bpm_A_minor.wav"
-#fluteFile = "mozartFlute.wav"
-#pianoFile = "mozartPiano.wav"
-fluteFile = "testFlute.wav"
-pianoFile = "testPiano.wav"
+fluteFile = "mozartFlute.wav"
+pianoFile = "mozartPiano.wav"
+#fluteFile = "testFlute.wav"
+#pianoFile = "testPiano.wav"
 fluteWavFilePath = folder + fluteFile
 pianoWavFilePath = folder + pianoFile
+
+def pad_zeros(image):
+  # resizing to 336 x 336 when original size is 336 x 250
+  return np.pad(image, ((0, 0), (0, 86)), 'constant')
+
+def preprocess_cqtMag(cqt):
+  cqt = np.log(cqt[:, 0:250])
+  cqt = pad_zeros((cqt+6.7)/16)
+  return (np.expand_dims(np.expand_dims(cqt, axis=0), axis=0))
+
+def postprocess_cqtMag(cqt):
+  cqt = np.squeeze(cqt)
+  cqt = (cqt-6.7)*16
+  cqt = np.exp(cqt[:, 0:250])
+  return cqt
 
 
 def main():
@@ -64,30 +80,24 @@ def main():
   fluteCqtMag, fluteCqtPhase = np.abs(fluteCqt), np.angle(fluteCqt)
   pianoCqtMag, pianoCqtPhase = np.abs(pianoCqt), np.angle(pianoCqt)
 
-  x = (np.expand_dims(np.expand_dims(fluteCqtMag, axis=0), axis=0))
-  x = x[:, :, :, 0:336]
+  fluteCqtMag, pianoCqtMag = preprocess_cqtMag(fluteCqtMag), preprocess_cqtMag(pianoCqtMag)
 
-  print(x.shape)
+  print(fluteCqtMag.shape), print(pianoCqtMag.shape)
 
-  fakePianoCQTMag = gen_piano(torch.from_numpy(x)).detach().numpy()
-  fakePianoCQTMag = np.squeeze(fakePianoCQTMag)
-  fluteCqtPhase = fluteCqtPhase[:, 0:336]
+  fakePianoCQTMag = gen_piano(torch.from_numpy(fluteCqtMag)).detach().numpy()
+  fluteCqtPhase = fluteCqtPhase[:, 0:250]
   
   print(fluteCqtPhase.shape)
   print(fakePianoCQTMag.shape)
 
-  x = (np.expand_dims(np.expand_dims(pianoCqtMag, axis=0), axis=0))
-  x = x[:, :, :, 0:336]
-
-  print(x.shape)
-
-  fakeFluteCQTMag = gen_flute(torch.from_numpy(x)).detach().numpy()
-  fakeFluteCQTMag = np.squeeze(fakeFluteCQTMag)
-  pianoCqtPhase = pianoCqtPhase[:, 0:336]
+  fakeFluteCQTMag = gen_flute(torch.from_numpy(pianoCqtMag)).detach().numpy()
+  pianoCqtPhase = pianoCqtPhase[:, 0:250]
   
   print(pianoCqtPhase.shape)
   print(fakeFluteCQTMag.shape)
-  
+
+
+  fakeFluteCQTMag, fakePianoCQTMag = postprocess_cqtMag(fakeFluteCQTMag), postprocess_cqtMag(fakePianoCQTMag)
 
   # Reconstruct piano wav from piano abs(CQT) + flute phase
   minLength = min(fluteCqtPhase.shape[1], fakePianoCQTMag.shape[1])
