@@ -25,8 +25,9 @@ filterScale = 0.8
 numSecondsPerChunk = 4
 ###########################################################
 
-wavFilePath = "data/mist-flute-chill-melody_112bpm_A_minor.wav"
-
+#wavFilePath = "data/mist-flute-chill-melody_112bpm_A_minor.wav"
+#wavFilePath = "data/testFlute.wav"
+wavFilePath = "data/mozartFlute.wav"
 
 def main():
   gen = Generator().to(config.DEVICE)

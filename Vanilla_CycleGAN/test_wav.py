@@ -25,7 +25,15 @@ filterScale = 0.8
 numSecondsPerChunk = 4
 ###########################################################
 
-wavFilePath = "../Pix2Pix/data/mist-flute-chill-melody_112bpm_A_minor.wav"
+
+folder = "../Pix2Pix/data/"
+#fluteWavFile = "mist-flute-chill-melody_112bpm_A_minor.wav"
+#fluteFile = "mozartFlute.wav"
+#pianoFile = "mozartPiano.wav"
+fluteFile = "testFlute.wav"
+pianoFile = "testPiano.wav"
+fluteWavFilePath = folder + fluteFile
+pianoWavFilePath = folder + pianoFile
 
 
 def main():
@@ -46,13 +54,15 @@ def main():
   )
 
   # load the wav
-  data, sr = librosa.load(wavFilePath, sr=16000)
+  dataFlute, sr = librosa.load(fluteWavFilePath, sr=16000)
+  dataPiano, sr = librosa.load(pianoWavFilePath, sr=16000)
 
   # perform CQT
-  fluteCqt = np.abs(librosa.cqt(data, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale))
+  fluteCqt = np.abs(librosa.cqt(dataFlute, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale))
+  pianoCqt = np.abs(librosa.cqt(dataPiano, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale))
 
-  fluteCqtMag = np.abs(fluteCqt)
-  fluteCqtPhase = np.angle(fluteCqt)
+  fluteCqtMag, fluteCqtPhase = np.abs(fluteCqt), np.angle(fluteCqt)
+  pianoCqtMag, pianoCqtPhase = np.abs(pianoCqt), np.angle(pianoCqt)
 
   x = (np.expand_dims(np.expand_dims(fluteCqtMag, axis=0), axis=0))
   x = x[:, :, :, 0:336]
@@ -66,14 +76,33 @@ def main():
   print(fluteCqtPhase.shape)
   print(fakePianoCQTMag.shape)
 
-  # Reconstruct flute wav from flute abs(CQT) + piano phase
+  x = (np.expand_dims(np.expand_dims(pianoCqtMag, axis=0), axis=0))
+  x = x[:, :, :, 0:336]
+
+  print(x.shape)
+
+  fakeFluteCQTMag = gen_flute(torch.from_numpy(x)).detach().numpy()
+  fakeFluteCQTMag = np.squeeze(fakeFluteCQTMag)
+  pianoCqtPhase = pianoCqtPhase[:, 0:336]
+  
+  print(pianoCqtPhase.shape)
+  print(fakeFluteCQTMag.shape)
+  
+
+  # Reconstruct piano wav from piano abs(CQT) + flute phase
   minLength = min(fluteCqtPhase.shape[1], fakePianoCQTMag.shape[1])
   pianoCqtReconstructed = np.abs(fakePianoCQTMag[:, 0:minLength]) * np.exp(1j*np.angle(fluteCqtPhase[:, 0:minLength]))
-  data = librosa.icqt(pianoCqtReconstructed, sr=sr, hop_length = hopLength, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
-  
-  pianoReconstructedFromFlutePhaseWav = f'data/pianoReconstructedFromFlutePhase.wav'
-  sf.write(pianoReconstructedFromFlutePhaseWav, data, sr, subtype='PCM_24')
+  genPiano = librosa.icqt(pianoCqtReconstructed, sr=sr, hop_length = hopLength, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
 
+  # Reconstruct flute wav from flute abs(CQT) + piano phase
+  minLength = min(pianoCqtPhase.shape[1], fakeFluteCQTMag.shape[1])
+  fluteCqtReconstructed = np.abs(fakeFluteCQTMag[:, 0:minLength]) * np.exp(1j*np.angle(pianoCqtPhase[:, 0:minLength]))
+  genFlute = librosa.icqt(fluteCqtReconstructed, sr=sr, hop_length = hopLength, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
+  
+  pianoReconstructed = f'data/pianoReconstructed_{fluteFile}.wav'
+  sf.write(pianoReconstructed, genPiano, sr, subtype='PCM_24')
+  fluteReconstructed = f'data/fluteReconstructed_{pianoFile}.wav'
+  sf.write(fluteReconstructed, genFlute, sr, subtype='PCM_24')
 
 if __name__ == "__main__":
   main()
