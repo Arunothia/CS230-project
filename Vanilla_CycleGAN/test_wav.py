@@ -74,8 +74,8 @@ def main():
   dataPiano, sr = librosa.load(pianoWavFilePath, sr=16000)
 
   # perform CQT
-  fluteCqt = np.abs(librosa.cqt(dataFlute, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale))
-  pianoCqt = np.abs(librosa.cqt(dataPiano, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale))
+  fluteCqt = librosa.cqt(dataFlute, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
+  pianoCqt = librosa.cqt(dataPiano, sr=sr, hop_length = hopLength, n_bins = numBins, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
 
   fluteCqtMag, fluteCqtPhase = np.abs(fluteCqt), np.angle(fluteCqt)
   pianoCqtMag, pianoCqtPhase = np.abs(pianoCqt), np.angle(pianoCqt)
