@@ -82,31 +82,17 @@ def main():
 
   fluteCqtMag, pianoCqtMag = preprocess_cqtMag(fluteCqtMag), preprocess_cqtMag(pianoCqtMag)
 
-  print(fluteCqtMag.shape), print(pianoCqtMag.shape)
-
-  fakePianoCQTMag = gen_piano(torch.from_numpy(fluteCqtMag)).detach().numpy()
-  fluteCqtPhase = fluteCqtPhase[:, 0:250]
-  
-  print(fluteCqtPhase.shape)
-  print(fakePianoCQTMag.shape)
-
-  fakeFluteCQTMag = gen_flute(torch.from_numpy(pianoCqtMag)).detach().numpy()
-  pianoCqtPhase = pianoCqtPhase[:, 0:250]
-  
-  print(pianoCqtPhase.shape)
-  print(fakeFluteCQTMag.shape)
-
+  fakePianoCQTMag, fakeFluteCQTMag = gen_piano(torch.from_numpy(fluteCqtMag)).detach().numpy(), gen_flute(torch.from_numpy(pianoCqtMag)).detach().numpy()
 
   fakeFluteCQTMag, fakePianoCQTMag = postprocess_cqtMag(fakeFluteCQTMag), postprocess_cqtMag(fakePianoCQTMag)
+  pianoCqtPhase, fluteCqtPhase = pianoCqtPhase[:, 0:250], fluteCqtPhase[:, 0:250]
 
   # Reconstruct piano wav from piano abs(CQT) + flute phase
-  minLength = min(fluteCqtPhase.shape[1], fakePianoCQTMag.shape[1])
-  pianoCqtReconstructed = np.abs(fakePianoCQTMag[:, 0:minLength]) * np.exp(1j*np.angle(fluteCqtPhase[:, 0:minLength]))
+  pianoCqtReconstructed = np.abs(fakePianoCQTMag) * np.exp(1j*np.angle(fluteCqtPhase))
   genPiano = librosa.icqt(pianoCqtReconstructed, sr=sr, hop_length = hopLength, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
 
   # Reconstruct flute wav from flute abs(CQT) + piano phase
-  minLength = min(pianoCqtPhase.shape[1], fakeFluteCQTMag.shape[1])
-  fluteCqtReconstructed = np.abs(fakeFluteCQTMag[:, 0:minLength]) * np.exp(1j*np.angle(pianoCqtPhase[:, 0:minLength]))
+  fluteCqtReconstructed = np.abs(fakeFluteCQTMag) * np.exp(1j*np.angle(pianoCqtPhase))
   genFlute = librosa.icqt(fluteCqtReconstructed, sr=sr, hop_length = hopLength, bins_per_octave = numBinsPerOctave, filter_scale = filterScale)
   
   pianoReconstructed = f'data/pianoReconstructed_{fluteFile}.wav'
