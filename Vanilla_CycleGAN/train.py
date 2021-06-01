@@ -21,7 +21,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
     prefix='Train: ')
   
   Generator_Loss = []
-  Discriminator_Loss = 0[]
+  Discriminator_Loss = []
 
   for idx, (piano, flute) in enumerate(loop):
     piano = piano.to(config.DEVICE)
