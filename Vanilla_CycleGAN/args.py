@@ -3,7 +3,7 @@ import argparse
 def get_setup_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", type=str, default="CQT-CycleGAN", help="model name or version")
-    parser.add_argument("--num_epochs", type=int, default=1, help="number of epochs of training")
+    parser.add_argument("--num_epochs", type=int, default=5, help="number of epochs of training")
     parser.add_argument("--output_channels", type=int, default=3, help="number of output channels")
     parser.add_argument("--norm_type", type=str, default="instancenorm", help="type of normalization")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
