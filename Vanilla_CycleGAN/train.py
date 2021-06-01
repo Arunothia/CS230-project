@@ -86,7 +86,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
 
         val_loader = DataLoader(
             val_dataset,
-            batch_size = 16,
+            batch_size = config.BATCH_SIZE,
             shuffle=False
         )
         val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder=config.SAVED_IMAGES_DIR)
