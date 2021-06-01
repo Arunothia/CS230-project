@@ -1,7 +1,7 @@
 import torch
 from dataset import PianoFluteDataset
 import sys
-from utils import save_checkpoint, load_checkpoint, val, AverageMeter, ProgressMeter
+from utils import save_checkpoint, load_checkpoint, val, AverageMeter, ProgressMeter, draw_result
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
@@ -19,6 +19,9 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
     len(loop),
     [disc_loss, gen_loss],
     prefix='Train: ')
+  
+  Generator_Loss = 0.0
+  Discriminator_Loss = 0.0
 
   for idx, (piano, flute) in enumerate(loop):
     piano = piano.to(config.DEVICE)
@@ -45,6 +48,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
       D_loss = (Disc_flute_loss + Disc_piano_loss)/2
       with torch.no_grad():
         disc_loss.update(D_loss, 1)
+        Discriminator_Loss += D_loss/len(loop)
 
       opt_disc.zero_grad()
       d_scaler.scale(D_loss).backward()
@@ -89,6 +93,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
 
       with torch.no_grad():
         gen_loss.update(G_loss, 1)
+        Generator_Loss += G_loss/len(loop)
 
 
       if idx % 5 == 0:
@@ -104,6 +109,8 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
             shuffle=False
         )
         val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder=config.SAVED_IMAGES_DIR)
+  
+  return (Discriminator_Loss, Generator_Loss)
 
 def main():
   disc_P = Discriminator(in_channels=1).to(config.DEVICE)
@@ -155,16 +162,21 @@ def main():
   g_scaler = torch.cuda.amp.GradScaler()
   d_scaler = torch.cuda.amp.GradScaler()
 
-  
+  D_Loss, G_Loss = [], []
 
   for epoch in range(config.NUM_EPOCHS):
-    train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
+    d_Loss, g_Loss = train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
 
     if config.SAVE_MODEL and epoch % 5 == 0:
       save_checkpoint(gen_P, opt_gen, filename=config.CHECKPOINT_GEN_P)
       save_checkpoint(gen_F, opt_gen, filename=config.CHECKPOINT_GEN_F)
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
+
+    D_Loss.append(d_Loss), G_Loss.append(g_Loss)
+    
+  
+  draw_result(range(epoch), D_Loss, G_Loss, "Training Loss Curve")
 
 if __name__ == "__main__":
   main()

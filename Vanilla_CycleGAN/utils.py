@@ -1,6 +1,7 @@
 import random, torch, os, numpy as np
 import config
 from torchvision.utils import save_image
+import matplotlib.pyplot as plt
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -122,3 +123,19 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder):
             progress.display(e)
 
     gen_F.train(), gen_P.train(), disc_F.train(), disc_P.train()
+
+
+def draw_result(lst_iter, lst_loss_disc, lst_loss_gen, title):
+    plt.plot(lst_iter, lst_loss_disc, '-b', label='Discriminator Loss')
+    plt.plot(lst_iter, lst_loss_gen, '-r', label='Generator Loss')
+
+    plt.xlabel("n iteration")
+    plt.legend(loc='upper left')
+    plt.title(title)
+
+    # save image
+    plt.savefig(title+".png")  # should before show method
+
+    # show
+    plt.show()
+
