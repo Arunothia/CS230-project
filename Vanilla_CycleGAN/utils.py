@@ -64,7 +64,7 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
             identity_piano_loss * config.LAMBDA_IDENTITY
         )
 
-        losses.update(G_loss, 1)
+        losses.update(G_loss)
         progress.display(epoch)
 
     gen_F.train(), gen_P.train(), disc_F.train(), disc_P.train()
