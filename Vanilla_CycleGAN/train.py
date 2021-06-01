@@ -20,8 +20,8 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
     [disc_loss, gen_loss],
     prefix='Train: ')
   
-  Generator_Loss = 0.0
-  Discriminator_Loss = 0.0
+  Generator_Loss = []
+  Discriminator_Loss = 0[]
 
   for idx, (piano, flute) in enumerate(loop):
     piano = piano.to(config.DEVICE)
@@ -48,7 +48,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
       D_loss = (Disc_flute_loss + Disc_piano_loss)/2
       with torch.no_grad():
         disc_loss.update(D_loss, 1)
-        Discriminator_Loss += D_loss/len(loop)
+        Discriminator_Loss.append(D_loss)
 
       opt_disc.zero_grad()
       d_scaler.scale(D_loss).backward()
@@ -93,7 +93,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
 
       with torch.no_grad():
         gen_loss.update(G_loss, 1)
-        Generator_Loss += G_loss/len(loop)
+        Generator_Loss.append(G_loss)
 
 
       if idx % 200 == 0:
@@ -174,10 +174,10 @@ def main():
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
 
-    D_Loss.append(d_Loss), G_Loss.append(g_Loss)
+    D_Loss.extend(d_Loss), G_Loss.extend(g_Loss)
     
   
-  draw_result(range(config.NUM_EPOCHS), D_Loss, G_Loss, "Training_Loss_Curve")
+  draw_result(range(config.NUM_EPOCHS*len(loader)), D_Loss, G_Loss, "Training_Loss_Curve")
 
 if __name__ == "__main__":
   main()
