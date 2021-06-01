@@ -82,7 +82,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
       if idx % 200 == 0:
         save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{epoch}_{idx}.png")
         save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{epoch}_{idx}.png")
-        val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=True)
+        val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=False)
 
         val_loader = DataLoader(
             val_dataset,
