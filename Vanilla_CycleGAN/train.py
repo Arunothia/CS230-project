@@ -150,7 +150,7 @@ def main():
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
         
-    val(gen_F, gen_P, disc_F, disc_P, mse, L1, epoch, folder=config.SAVED_IMAGES_DIR)
+    val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder=config.SAVED_IMAGES_DIR)
 
 if __name__ == "__main__":
   main()
