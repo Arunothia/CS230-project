@@ -15,8 +15,8 @@ class PianoFluteDataset(Dataset):
         self.transform = transform
 
         if isTrain:
-            self.piano_images = sample(os.listdir(root_piano), 120)
-            self.flute_images = sample(os.listdir(root_flute), 120)
+            self.piano_images = sample(os.listdir(root_piano), 12000)
+            self.flute_images = sample(os.listdir(root_flute), 12000)
         else:
             self.piano_images = os.listdir(root_piano)[0:100]
             self.flute_images = self.piano_images 
