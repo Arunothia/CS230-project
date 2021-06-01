@@ -165,6 +165,7 @@ def main():
   D_Loss, G_Loss = [], []
 
   for epoch in range(config.NUM_EPOCHS):
+    print("=======================> Epoch " + str(epoch) + " =======================================>")
     d_Loss, g_Loss = train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
 
     if config.SAVE_MODEL and epoch % 5 == 0:
@@ -176,7 +177,7 @@ def main():
     D_Loss.append(d_Loss), G_Loss.append(g_Loss)
     
   
-  draw_result(range(epoch), D_Loss, G_Loss, "Training Loss Curve")
+  draw_result(config.NUM_EPOCHS, D_Loss, G_Loss, "Training Loss Curve")
 
 if __name__ == "__main__":
   main()
