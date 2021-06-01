@@ -177,7 +177,7 @@ def main():
     D_Loss.append(d_Loss), G_Loss.append(g_Loss)
     
   
-  draw_result(range(config.NUM_EPOCHS), D_Loss, G_Loss, "Training Loss Curve")
+  draw_result(range(config.NUM_EPOCHS), D_Loss, G_Loss, "Training_Loss_Curve")
 
 if __name__ == "__main__":
   main()
