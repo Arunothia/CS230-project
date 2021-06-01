@@ -11,7 +11,7 @@ from torchvision.utils import save_image
 from discriminator_model import Discriminator
 from generator_model import Generator
 
-def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler):
+def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler):
   loop = tqdm(loader, leave=True)
 
   for idx, (piano, flute) in enumerate(loop):
@@ -80,8 +80,16 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       g_scaler.update()
 
       if idx % 200 == 0:
-        save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
-        save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
+        save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{epoch}_{idx}.png")
+        save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{epoch}_{idx}.png")
+        val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=True)
+
+        val_loader = DataLoader(
+            val_dataset,
+            batch_size = 16,
+            shuffle=False
+        )
+        val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, f"_{epoch}_{idx}", folder=config.SAVED_IMAGES_DIR)
 
 def main():
   disc_P = Discriminator(in_channels=1).to(config.DEVICE)
@@ -133,24 +141,16 @@ def main():
   g_scaler = torch.cuda.amp.GradScaler()
   d_scaler = torch.cuda.amp.GradScaler()
 
-  val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=True)
-
-  val_loader = DataLoader(
-      val_dataset,
-      batch_size = 16,
-      shuffle=False
-  )
+  
 
   for epoch in range(config.NUM_EPOCHS):
-    train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
+    train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
 
     if config.SAVE_MODEL and epoch % 5 == 0:
       save_checkpoint(gen_P, opt_gen, filename=config.CHECKPOINT_GEN_P)
       save_checkpoint(gen_F, opt_gen, filename=config.CHECKPOINT_GEN_F)
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
-        
-    val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder=config.SAVED_IMAGES_DIR)
 
 if __name__ == "__main__":
   main()

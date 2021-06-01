@@ -62,10 +62,16 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
         param_group["lr"] = lr
 
 def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
-    losses = AverageMeter('Loss', ':.4e')
+    loss = AverageMeter('Loss', ':.4e')
+    loss_piano = AverageMeter('Gen_piano', ':.4e')
+    loss_flute = AverageMeter('Gen_flute', ':.4e')
+    loss_id_piano = AverageMeter('Identity_piano', ':.4e')
+    loss_id_flute = AverageMeter('Identity_flute', ':.4e')
+    loss_cyc_piano = AverageMeter('Cycle_piano', ':.4e')
+    loss_cyc_flute = AverageMeter('Cycle_flute', ':.4e')
     progress = ProgressMeter(
         len(val_loader),
-        [losses],
+        [loss, loss_piano, loss_flute, loss_id_piano, loss_id_flute, loss_cyc_piano, loss_cyc_flute],
         prefix='Val: ')
     flute, piano = next(iter(val_loader))
     flute, piano = flute.to(config.DEVICE), piano.to(config.DEVICE)
@@ -83,18 +89,24 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
         D_F_fake = disc_F(flute_fake)
         loss_G_F = mse(D_F_fake, torch.ones_like(D_F_fake))
         loss_G_P = mse(D_P_fake, torch.ones_like(D_P_fake))
+        loss_piano.update(loss_G_P, 1)
+        loss_flute.update(loss_G_F, 1)
 
         # Cycle Loss
         cycle_piano = gen_P(flute_fake)
         cycle_flute = gen_F(piano_fake)
         cycle_piano_loss = L1(piano, cycle_piano)
         cycle_flute_loss = L1(flute, cycle_flute)
+        loss_cyc_piano.update(cycle_piano_loss, 1)
+        loss_cyc_flute.update(cycle_flute_loss, 1)
 
         # Identity Loss
         identity_flute = gen_F(flute)
         identity_piano = gen_P(piano)
         identity_piano_loss = L1(piano, identity_piano)
         identity_flute_loss = L1(flute, identity_flute)
+        loss_id_piano.update(identity_piano_loss, 1)
+        loss_id_flute.update(identity_flute_loss, 1)
 
         # Overall Generator Loss
         G_loss =  (
@@ -106,7 +118,7 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
             identity_piano_loss * config.LAMBDA_IDENTITY
         )
 
-        losses.update(G_loss, 1)
+        loss.update(G_loss, 1)
         progress.display(epoch)
 
     gen_F.train(), gen_P.train(), disc_F.train(), disc_P.train()
