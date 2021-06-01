@@ -24,10 +24,7 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
 
 def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
     losses = torch_utils.AverageMeter('Loss', length=10)
-    progress = torch_utils.ProgressMeter(
-        len(val_loader),
-        [losses],
-        prefix='Val: ')
+    progress = torch_utils.ProgressMeter(len(val_loader),[losses])
     flute, piano = next(iter(val_loader))
     flute, piano = flute.to(config.DEVICE), piano.to(config.DEVICE)
     gen_F.eval(), gen_P.eval(), disc_F.eval(), disc_P.eval()
