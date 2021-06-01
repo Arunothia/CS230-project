@@ -16,10 +16,11 @@ class PianoFluteDataset(Dataset):
 
         if isTrain:
             self.flute_images = os.listdir(root_flute)[0: 12500]
+            self.piano_images = os.listdir(root_piano)[0: 12500] 
         else:
             self.flute_images = os.listdir(root_flute)[12501:12505]
+            self.piano_images = os.listdir(root_piano)[12501:12505] 
 
-        self.piano_images = self.flute_images 
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
