@@ -89,7 +89,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
             batch_size = 16,
             shuffle=False
         )
-        val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, f"_{epoch}_{idx}", folder=config.SAVED_IMAGES_DIR)
+        val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder=config.SAVED_IMAGES_DIR)
 
 def main():
   disc_P = Discriminator(in_channels=1).to(config.DEVICE)

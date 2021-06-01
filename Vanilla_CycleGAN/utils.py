@@ -61,7 +61,7 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
 
-def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
+def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder):
     loss = AverageMeter('Loss', ':.4e')
     loss_piano = AverageMeter('Gen_piano', ':.4e')
     loss_flute = AverageMeter('Gen_flute', ':.4e')
@@ -79,10 +79,10 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
     with torch.no_grad():
         piano_fake = gen_F(piano)
         flute_fake = gen_P(flute)
-        save_image(flute, folder + f"/flute_{epoch}.png")
-        save_image(piano, folder + f"/piano_{epoch}.png")
-        save_image(flute_fake, folder + f"/fake_flute{epoch}.png")
-        save_image(piano_fake, folder + f"/fake_piano{epoch}.png")
+        save_image(flute, folder + f"/Val_flute_{epoch}_{idx}.png")
+        save_image(piano, folder + f"/Val_piano_{epoch}_{idx}.png")
+        save_image(flute_fake, folder + f"/Val_fake_flute{epoch}_{idx}.png")
+        save_image(piano_fake, folder + f"/Val_fake_piano{epoch}_{idx}.png")
 
         # Adversarial Loss for both generators
         D_P_fake = disc_P(piano_fake)
