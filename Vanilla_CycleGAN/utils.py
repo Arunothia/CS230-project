@@ -73,52 +73,52 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder):
         len(val_loader),
         [loss, loss_piano, loss_flute, loss_id_piano, loss_id_flute, loss_cyc_piano, loss_cyc_flute],
         prefix='Val: ')
-    flute, piano = next(iter(val_loader))
-    flute, piano = flute.to(config.DEVICE), piano.to(config.DEVICE)
     gen_F.eval(), gen_P.eval(), disc_F.eval(), disc_P.eval()
-    with torch.no_grad():
-        piano_fake = gen_F(piano)
-        flute_fake = gen_P(flute)
-        save_image(flute, folder + f"/Val_flute_{epoch}_{idx}.png")
-        save_image(piano, folder + f"/Val_piano_{epoch}_{idx}.png")
-        save_image(flute_fake, folder + f"/Val_fake_flute{epoch}_{idx}.png")
-        save_image(piano_fake, folder + f"/Val_fake_piano{epoch}_{idx}.png")
+    for e, (flute, piano) in enumerate(val_loader):
+        flute, piano = flute.to(config.DEVICE), piano.to(config.DEVICE)
+        with torch.no_grad():
+            piano_fake = gen_F(piano)
+            flute_fake = gen_P(flute)
+            save_image(flute, folder + f"/Val_flute_{epoch}_{idx}.png")
+            save_image(piano, folder + f"/Val_piano_{epoch}_{idx}.png")
+            save_image(flute_fake, folder + f"/Val_fake_flute{epoch}_{idx}.png")
+            save_image(piano_fake, folder + f"/Val_fake_piano{epoch}_{idx}.png")
 
-        # Adversarial Loss for both generators
-        D_P_fake = disc_P(piano_fake)
-        D_F_fake = disc_F(flute_fake)
-        loss_G_F = mse(D_F_fake, torch.ones_like(D_F_fake))
-        loss_G_P = mse(D_P_fake, torch.ones_like(D_P_fake))
-        loss_piano.update(loss_G_P, 1)
-        loss_flute.update(loss_G_F, 1)
+            # Adversarial Loss for both generators
+            D_P_fake = disc_P(piano_fake)
+            D_F_fake = disc_F(flute_fake)
+            loss_G_F = mse(D_F_fake, torch.ones_like(D_F_fake))
+            loss_G_P = mse(D_P_fake, torch.ones_like(D_P_fake))
+            loss_piano.update(loss_G_P, 1)
+            loss_flute.update(loss_G_F, 1)
 
-        # Cycle Loss
-        cycle_piano = gen_P(flute_fake)
-        cycle_flute = gen_F(piano_fake)
-        cycle_piano_loss = L1(piano, cycle_piano)
-        cycle_flute_loss = L1(flute, cycle_flute)
-        loss_cyc_piano.update(cycle_piano_loss, 1)
-        loss_cyc_flute.update(cycle_flute_loss, 1)
+            # Cycle Loss
+            cycle_piano = gen_P(flute_fake)
+            cycle_flute = gen_F(piano_fake)
+            cycle_piano_loss = L1(piano, cycle_piano)
+            cycle_flute_loss = L1(flute, cycle_flute)
+            loss_cyc_piano.update(cycle_piano_loss, 1)
+            loss_cyc_flute.update(cycle_flute_loss, 1)
 
-        # Identity Loss
-        identity_flute = gen_F(flute)
-        identity_piano = gen_P(piano)
-        identity_piano_loss = L1(piano, identity_piano)
-        identity_flute_loss = L1(flute, identity_flute)
-        loss_id_piano.update(identity_piano_loss, 1)
-        loss_id_flute.update(identity_flute_loss, 1)
+            # Identity Loss
+            identity_flute = gen_F(flute)
+            identity_piano = gen_P(piano)
+            identity_piano_loss = L1(piano, identity_piano)
+            identity_flute_loss = L1(flute, identity_flute)
+            loss_id_piano.update(identity_piano_loss, 1)
+            loss_id_flute.update(identity_flute_loss, 1)
 
-        # Overall Generator Loss
-        G_loss =  (
-            loss_G_F +
-            loss_G_P +
-            cycle_flute_loss * config.LAMBDA_CYCLE +
-            cycle_piano_loss * config.LAMBDA_CYCLE +
-            identity_flute_loss * config.LAMBDA_IDENTITY +
-            identity_piano_loss * config.LAMBDA_IDENTITY
-        )
+            # Overall Generator Loss
+            G_loss =  (
+                loss_G_F +
+                loss_G_P +
+                cycle_flute_loss * config.LAMBDA_CYCLE +
+                cycle_piano_loss * config.LAMBDA_CYCLE +
+                identity_flute_loss * config.LAMBDA_IDENTITY +
+                identity_piano_loss * config.LAMBDA_IDENTITY
+            )
 
-        loss.update(G_loss, 1)
-        progress.display(epoch)
+            loss.update(G_loss, 1)
+            progress.display(e)
 
     gen_F.train(), gen_P.train(), disc_F.train(), disc_P.train()
