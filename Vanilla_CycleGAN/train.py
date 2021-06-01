@@ -1,7 +1,7 @@
 import torch
 from dataset import PianoFluteDataset
 import sys
-from utils import save_checkpoint, load_checkpoint
+from utils import save_checkpoint, load_checkpoint, val
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
@@ -133,14 +133,24 @@ def main():
   g_scaler = torch.cuda.amp.GradScaler()
   d_scaler = torch.cuda.amp.GradScaler()
 
+  val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=True)
+
+  val_loader = DataLoader(
+      val_dataset,
+      batch_size = 16,
+      shuffle=False
+  )
+
   for epoch in range(config.NUM_EPOCHS):
     train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
 
-    if config.SAVE_MODEL:
+    if config.SAVE_MODEL and epoch % 5 == 0:
       save_checkpoint(gen_P, opt_gen, filename=config.CHECKPOINT_GEN_P)
       save_checkpoint(gen_F, opt_gen, filename=config.CHECKPOINT_GEN_F)
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
+        
+    val(gen_F, gen_P, disc_F, disc_P, mse, L1, epoch, folder=config.SAVED_IMAGES_DIR)
 
 if __name__ == "__main__":
   main()
