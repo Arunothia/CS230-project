@@ -91,7 +91,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
         gen_loss.update(G_loss, 1)
 
 
-      if idx % 200 == 0:
+      if idx % 5 == 0:
         with torch.no_grad():
           progress.display(idx)
         save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{epoch}_{idx}.png")

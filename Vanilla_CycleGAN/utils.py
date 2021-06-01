@@ -71,7 +71,7 @@ def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder):
     loss_cyc_flute = AverageMeter('Cycle_flute', ':.4e')
     progress = ProgressMeter(
         len(val_loader),
-        [loss],
+        [loss, loss_piano, loss_flute, loss_id_piano, loss_id_flute, loss_cyc_piano, loss_cyc_flute],
         prefix='Val: ')
     flute, piano = next(iter(val_loader))
     flute, piano = flute.to(config.DEVICE), piano.to(config.DEVICE)
