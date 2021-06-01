@@ -1,6 +1,7 @@
 import random, torch, os, numpy as np
 import config
 from torchvision.utils import save_image
+import torch_utils
 
 
 def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
@@ -22,8 +23,8 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
         param_group["lr"] = lr
 
 def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
-    losses = torch.AverageMeter('Loss', ':.4e')
-    progress = torch.ProgressMeter(
+    losses = torch_utils.AverageMeter('Loss', ':.4e')
+    progress = torch_utils.ProgressMeter(
         len(val_loader),
         [losses],
         prefix='Val: ')
