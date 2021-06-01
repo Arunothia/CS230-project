@@ -23,7 +23,7 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
         param_group["lr"] = lr
 
 def val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, epoch, folder):
-    losses = torch_utils.AverageMeter('Loss', ':.4e')
+    losses = torch_utils.AverageMeter('Loss', length=10)
     progress = torch_utils.ProgressMeter(
         len(val_loader),
         [losses],
