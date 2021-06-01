@@ -8,6 +8,7 @@ from generator_model import Generator
 import numpy as np
 import soundfile as sf
 import albumentations as A
+from torchvision.utils import save_image
 
 
 ###########################################################
@@ -82,7 +83,13 @@ def main():
 
   fluteCqtMag, pianoCqtMag = preprocess_cqtMag(fluteCqtMag), preprocess_cqtMag(pianoCqtMag)
 
+  save_image(torch.from_numpy(pianoCqtMag), f"data/piano_{pianoFile}.png")
+  save_image(torch.from_numpy(fluteCqtMag), f"data/flute_{fluteFile}.png")
+
   fakePianoCQTMag, fakeFluteCQTMag = gen_piano(torch.from_numpy(fluteCqtMag)).detach().numpy(), gen_flute(torch.from_numpy(pianoCqtMag)).detach().numpy()
+
+  save_image(torch.from_numpy(fakePianoCQTMag), f"data/fake_piano_{pianoFile}.png")
+  save_image(torch.from_numpy(fakeFluteCQTMag), f"data/fake_flute_{fluteFile}.png")
 
   fakeFluteCQTMag, fakePianoCQTMag = postprocess_cqtMag(fakeFluteCQTMag), postprocess_cqtMag(fakePianoCQTMag)
   pianoCqtPhase, fluteCqtPhase = pianoCqtPhase[:, 0:250], fluteCqtPhase[:, 0:250]

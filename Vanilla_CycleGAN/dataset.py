@@ -9,13 +9,18 @@ def pad_zeros(image):
   return np.pad(image, ((0, 0), (0, 86)), 'constant')
 
 class PianoFluteDataset(Dataset):
-    def __init__(self, root_piano, root_flute, transform=None):
+    def __init__(self, root_piano, root_flute, transform=None, isTrain=True):
         self.root_piano = root_piano
         self.root_flute = root_flute
         self.transform = transform
 
-        self.piano_images = sample(os.listdir(root_piano), 12000)
-        self.flute_images = sample(os.listdir(root_flute), 12000)
+        if isTrain:
+            self.flute_images = os.listdir(root_flute)[0: 12500]
+            self.piano_images = os.listdir(root_piano)[0: 12500] 
+        else:
+            self.flute_images = os.listdir(root_flute)[12501:12505]
+            self.piano_images = os.listdir(root_piano)[12501:12505] 
+
         self.length_dataset = max(len(self.piano_images), len(self.flute_images))
 
         self.piano_dataset_length = len(self.piano_images)
