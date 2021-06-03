@@ -1,7 +1,7 @@
 import torch
 from dataset import PianoFluteDataset
 import sys
-from utils import save_checkpoint, load_checkpoint
+from utils import save_checkpoint, load_checkpoint, val, AverageMeter, ProgressMeter, draw_result
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
@@ -11,8 +11,17 @@ from torchvision.utils import save_image
 from discriminator_model import Discriminator
 from generator_model import Generator
 
-def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler):
+def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler):
   loop = tqdm(loader, leave=True)
+  disc_loss = AverageMeter('Discriminator_Loss', ':.4e')
+  gen_loss = AverageMeter('Generator_Loss', ':.4e')
+  progress = ProgressMeter(
+    len(loop),
+    [disc_loss, gen_loss],
+    prefix='Train: ')
+  
+  Generator_Loss = []
+  Discriminator_Loss = []
 
   for idx, (piano, flute) in enumerate(loop):
     piano = piano.to(config.DEVICE)
@@ -37,6 +46,9 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       # Overall discriminator loss
 
       D_loss = (Disc_flute_loss + Disc_piano_loss)/2
+      with torch.no_grad():
+        disc_loss.update(D_loss, 1)
+        Discriminator_Loss.append(D_loss)
 
       opt_disc.zero_grad()
       d_scaler.scale(D_loss).backward()
@@ -79,9 +91,26 @@ def train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d
       g_scaler.step(opt_gen)
       g_scaler.update()
 
+      with torch.no_grad():
+        gen_loss.update(G_loss, 1)
+        Generator_Loss.append(G_loss)
+
+
       if idx % 200 == 0:
-        save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{idx}.png")
-        save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{idx}.png")
+        with torch.no_grad():
+          progress.display(idx)
+        save_image(fake_piano, config.SAVED_IMAGES_DIR+f"piano_{epoch}_{idx}.png")
+        save_image(fake_flute, config.SAVED_IMAGES_DIR+f"flute_{epoch}_{idx}.png")
+        val_dataset = PianoFluteDataset(root_piano=config.PIANO_TRAIN_DIR, root_flute=config.FLUTE_TRAIN_DIR, transform=config.transforms, isTrain=False)
+
+        val_loader = DataLoader(
+            val_dataset,
+            batch_size = config.BATCH_SIZE,
+            shuffle=False
+        )
+        val(gen_F, gen_P, disc_F, disc_P, mse, L1, val_loader, idx, epoch, folder=config.SAVED_IMAGES_DIR)
+  
+  return (Discriminator_Loss, Generator_Loss)
 
 def main():
   disc_P = Discriminator(in_channels=1).to(config.DEVICE)
@@ -133,14 +162,22 @@ def main():
   g_scaler = torch.cuda.amp.GradScaler()
   d_scaler = torch.cuda.amp.GradScaler()
 
-  for epoch in range(config.NUM_EPOCHS):
-    train_fn(disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
+  D_Loss, G_Loss = [], []
 
-    if config.SAVE_MODEL:
+  for epoch in range(config.NUM_EPOCHS):
+    print("=======================> Epoch " + str(epoch) + " =======================================>")
+    d_Loss, g_Loss = train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1, mse, d_scaler, g_scaler)
+
+    if config.SAVE_MODEL and epoch % 5 == 0:
       save_checkpoint(gen_P, opt_gen, filename=config.CHECKPOINT_GEN_P)
       save_checkpoint(gen_F, opt_gen, filename=config.CHECKPOINT_GEN_F)
       save_checkpoint(disc_P, opt_disc, filename=config.CHECKPOINT_CRITIC_P)
       save_checkpoint(disc_F, opt_disc, filename=config.CHECKPOINT_CRITIC_F)
+
+    D_Loss.extend(d_Loss), G_Loss.extend(g_Loss)
+    
+  
+  draw_result(range(config.NUM_EPOCHS*len(loader)), D_Loss, G_Loss, "Training_Loss_Curve")
 
 if __name__ == "__main__":
   main()
