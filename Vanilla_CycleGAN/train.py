@@ -23,7 +23,7 @@ def train_fn(epoch, disc_P, disc_F, gen_F, gen_P, loader, opt_disc, opt_gen, L1,
   Generator_Loss = []
   Discriminator_Loss = []
 
-  for idx, (piano, flute) in enumerate(loop):
+  for idx, (flute, piano) in enumerate(loop):
     piano = piano.to(config.DEVICE)
     flute = flute.to(config.DEVICE)
 
